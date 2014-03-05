@@ -3,232 +3,223 @@
 // 
 // Created by ooVoo on July 22, 2013
 //
-// © 2013 ooVoo, LLC.  License under Apache 2.0 license. http://www.apache.org/licenses/LICENSE-2.0.html 
+// © 2013 ooVoo, LLC.  Used under license. 
 //
 
 #import "ConferenceViewController.h"
-#import "InformationViewController.h"
-#import "AlertsViewController.h"
+#import "InformationSegmentedViewController.h"
+#import "ParticipantDetailViewController.h"
+#import "MessagesViewController.h"
 #import "VideoCollectionViewCell.h"
+#import "ConferenceToolbar.h"
+#import "LogsController.h"
+#import "MessagesController.h"
 #import "ooVooController.h"
+#import <AVFoundation/AVAudioSession.h>
 
-@interface ConferenceViewController () <UIPopoverControllerDelegate>
-{
-    BOOL mic;
-    BOOL speaker;
-    BOOL camera;
-    NSUInteger currentCamera;
-}
+@interface ConferenceViewController ()
 
-@property (nonatomic, copy) NSString *zoomedParticipantID;
-@property (nonatomic, strong) ooVooVideoView *fullScreenVideoView;
-@property (nonatomic, strong) UIPopoverController *infoPopoverController;
-@property (nonatomic, strong) UIPopoverController *alertsPopoverController;
+@property (nonatomic, strong) ParticipantsController *participantsController;
+@property (nonatomic, strong) LogsController *logsController;
+@property (nonatomic, strong) MessagesController *messagesController;
 @property (nonatomic, strong) NSBlockOperation *blockOperation;
-@end
+@property (nonatomic, weak)   UIPopoverController *infoPopoverController;
 
-static NSString *kCellIdentifier = @"VIDEO_CELL";
+@end
 
 @implementation ConferenceViewController
 
 - (void)dealloc
 {
-    self.infoPopoverController.delegate = self.alertsPopoverController.delegate = nil;
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	self.title = @"Conference";
-    self.view.backgroundColor = [UIColor blackColor];
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Alerts"
-                                                                             style:UIBarButtonItemStyleBordered
-                                                                            target:self
-                                                                            action:@selector(showAlertsView:)];
+    self.participantsController = [[ParticipantsController alloc] init];
+    self.logsController = [[LogsController alloc] init];
+    self.messagesController = [[MessagesController alloc] init];
+    self.logsController.participantsController = self.messagesController.participantsController = self.participantsController;
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Info"
-                                                                             style:UIBarButtonItemStyleBordered
-                                                                            target:self
-                                                                             action:@selector(navigateToInformation:)];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(conferenceDidBegin:)
+                                                 name:OOVOOConferenceDidBeginNotification
+                                               object:nil];
     
-    [self.collectionView registerClass:[VideoCollectionViewCell class] forCellWithReuseIdentifier:kCellIdentifier];
-    self.collectionView.indicatorStyle = UIScrollViewIndicatorStyleWhite;
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(conferenceDidFail:)
+                                                 name:OOVOOConferenceDidFailNotification
+                                               object:nil];
     
-    speaker = [ooVooController sharedController].speakerEnabled = YES;
-    mic = [ooVooController sharedController].microphoneEnabled = YES;
-    currentCamera = [ooVooController sharedController].currentCamera;
-    [[ooVooController sharedController] setCameraResolutionLevel:2];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(conferenceDidEnd:)
+                                                 name:OOVOOConferenceDidEndNotification
+                                               object:nil];
+    
+    [[ooVooController sharedController] joinConference:self.conferenceId
+                                         participantId:self.participantId
+                                       participantInfo:self.participantInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
-    UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
-    
-    UIBarButtonItem *micBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_mic"]
-                                                             style:mic?UIBarButtonItemStyleBordered:UIBarButtonItemStyleDone
-                                                            target:self
-                                                            action:@selector(muteMicPressed:)];
-    
-    UIBarButtonItem *spkBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_speaker"]
-                                                             style:speaker?UIBarButtonItemStyleBordered:UIBarButtonItemStyleDone
-                                                            target:self
-                                                            action:@selector(muteSpeakerPressed:)];
-    
-    UIBarButtonItem *endBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"  LEAVE  "
-                                                                         style:UIBarButtonItemStyleDone
-                                                                        target:self
-                                                                        action:@selector(endCallButtonPressed:)];
-    
-    UIBarButtonItem *camBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"ic_camera"]
-                                                             style:currentCamera?UIBarButtonItemStyleBordered:UIBarButtonItemStyleDone
-                                                            target:self
-                                                            action:@selector(cameraPressed:)];
-    
-    UIBarButtonItem *resBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:[self resolutionText]
-                                                             style:UIBarButtonItemStyleBordered
-                                                            target:self
-                                                            action:@selector(resButtonPressed:)];
-
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-    {
-        [self setToolbarItems:@[flexibleItem, micBarButtonItem, spkBarButtonItem, endBarButtonItem, camBarButtonItem, resBarButtonItem, flexibleItem] animated:NO];
-    }
-    else
-    {
-        [self setToolbarItems:@[micBarButtonItem, flexibleItem, spkBarButtonItem, flexibleItem, endBarButtonItem, flexibleItem, camBarButtonItem, flexibleItem, resBarButtonItem] animated:NO];        
-    }
-    
-    
-    self.navigationController.toolbarHidden = NO;
+    [self.collectionView reloadData];
+    self.participantsController.delegate = self;
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [self.collectionView reloadData];
-    self.participantsController.delegate = self;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(participantDidLeave:) name:OOVOOParticipantDidLeaveNotification object:nil];
+    
+    if ([ooVooController sharedController].inCallMessagesPermitted)
+    {
+        ConferenceToolbar *conferenceToolbar = (ConferenceToolbar *)self.navigationController.toolbar;
+        conferenceToolbar.messagesBarButtonItem.target = self;
+        conferenceToolbar.messagesBarButtonItem.action = @selector(showMessages:);
+    }
 }
 
-- (void)viewDidDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
-    [super viewDidDisappear:animated];
+    [super viewWillDisappear:animated];
     self.participantsController.delegate = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOParticipantDidLeaveNotification object:nil];
+    [self.infoPopoverController dismissPopoverAnimated:YES];
+}
+
+#pragma mark - Notifications
+- (void)conferenceDidBegin:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [ooVooController sharedController].speakerEnabled = YES;
+        
+        if ([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) // iOS 7 and on
+        {
+            [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
+                if (granted)
+                {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [ooVooController sharedController].microphoneEnabled = YES;
+                    });
+                }
+                else
+                {
+                    UIAlertView	*anAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Microphone permission denied",nil) message:NSLocalizedString(@"Go to your device Settings > Privacy > Microphone and switch this app to ON.", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"OK",nil) otherButtonTitles:nil];
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [anAlert show];
+                    });
+                    
+                }
+            }];
+        }
+        else
+        {
+            [ooVooController sharedController].microphoneEnabled = YES;
+        }
+    });
+}
+
+- (void)conferenceDidEnd:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        
+    });
+}
+
+- (void)conferenceDidFail:(NSNotification *)notification
+{
+    NSString *reason = [notification.userInfo objectForKey:OOVOOConferenceFailureReasonKey];
+    
+    double delayInSeconds = 0.75;
+    dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+    dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+        
+        [self.presentingViewController dismissViewControllerAnimated:NO completion:^{
+            
+            [[[UIAlertView alloc] initWithTitle:self.title
+                                        message:[NSString stringWithFormat:NSLocalizedString(@"Error - %@", nil), reason]
+                                       delegate:nil
+                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                              otherButtonTitles:nil] show];
+            
+        }];
+    });
 }
 
 #pragma mark - Actions
-- (void)navigateToInformation:(id)sender
-{
-    InformationViewController *infoViewController = [[InformationViewController alloc] initWithStyle:UITableViewStyleGrouped];
-    infoViewController.participantsController = self.participantsController;
-    infoViewController.conferenceId = self.conferenceId;
-    
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-    {
-        if (!self.infoPopoverController)
-        {
-            self.infoPopoverController = [[UIPopoverController alloc] initWithContentViewController:infoViewController];
-            self.infoPopoverController.delegate = self;
-            [self.infoPopoverController presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-        }
-        else
-        {
-            [self.infoPopoverController dismissPopoverAnimated:YES];
-            self.infoPopoverController = nil;
-        }
-    }
-    else
-    {
-        infoViewController.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:infoViewController animated:YES];        
-    }
-}
-
-- (void)showAlertsView:(id)sender
-{
-    AlertsViewController *alertsViewController = [[AlertsViewController alloc] init];
-    alertsViewController.logsController = self.logsController;
-    
-    if ([UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad)
-    {
-        if (!self.alertsPopoverController)
-        {
-            self.alertsPopoverController = [[UIPopoverController alloc] initWithContentViewController:alertsViewController];
-            self.alertsPopoverController.delegate = self;
-            [self.alertsPopoverController presentPopoverFromBarButtonItem:sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-        }
-        else
-        {
-            [self.alertsPopoverController dismissPopoverAnimated:YES];
-            self.alertsPopoverController = nil;
-        }
-    }
-    else
-    {
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:alertsViewController];
-        [self presentViewController:navigationController animated:YES completion: nil];
-    }
-}
-
-- (void)endCallButtonPressed:(id)sender
+- (IBAction)leaveConference:(id)sender
 {
     [[ooVooController sharedController] leaveConference];
 }
 
-- (void)muteMicPressed:(id)sender
+- (IBAction)showInformation:(id)sender
 {
-    mic = !mic;
-    [ooVooController sharedController].microphoneEnabled = mic;
-    ((UIBarButtonItem *)sender).style = mic?UIBarButtonItemStyleBordered:UIBarButtonItemStyleDone;
-}
-
-- (void)muteSpeakerPressed:(id)sender
-{    
-    speaker = !speaker;
-    [ooVooController sharedController].speakerEnabled = speaker;
-    ((UIBarButtonItem *)sender).style = speaker?UIBarButtonItemStyleBordered:UIBarButtonItemStyleDone;
-}
-
-- (void)cameraPressed:(id)sender
-{
-    currentCamera = !currentCamera;
-    [[ooVooController sharedController] selectCamera:currentCamera];
-    ((UIBarButtonItem *)sender).style = currentCamera?UIBarButtonItemStyleBordered:UIBarButtonItemStyleDone;
-}
-
-- (void)resButtonPressed:(id)sender
-{
-    ooVooController *ooVoo = [ooVooController sharedController];
-    if ([ooVoo cameraResolutionLevel] == ooVooCameraResolutionLow)
+    if (self.infoPopoverController)
     {
-        [ooVoo setCameraResolutionLevel:ooVooCameraResolutionMedium];
-        ((UIBarButtonItem *)sender).title = @"Med";
+        [self.infoPopoverController dismissPopoverAnimated:YES];
     }
-    else if ([ooVoo cameraResolutionLevel] == ooVooCameraResolutionMedium)
+    else
     {
-        [ooVoo setCameraResolutionLevel:ooVooCameraResolutionLow];
-        ((UIBarButtonItem *)sender).title = @"Low";
+        [self performSegueWithIdentifier:@"NavigateToInfo" sender:self];
     }
 }
 
-- (NSString*)resolutionText
+- (IBAction)showMessages:(id)sender
 {
-    ooVooController *ooVoo = [ooVooController sharedController];
-    NSString* resolutionText = @"";
-    if ([ooVoo cameraResolutionLevel] == ooVooCameraResolutionLow)
+    [self performSegueWithIdentifier:@"Messages" sender:self];
+}
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"NavigateToInfo"])
     {
-        resolutionText = @"Low";
+        InformationSegmentedViewController *infoViewController;        
+        UINavigationController *navigationController = segue.destinationViewController;
+        infoViewController = navigationController.viewControllers[0];
+        infoViewController.participantsController = self.participantsController;
+        infoViewController.logsController = self.logsController;
+        infoViewController.conferenceId = self.conferenceId;
+
+        if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]])
+        {
+            self.infoPopoverController = ((UIStoryboardPopoverSegue *)segue).popoverController;
+        }
     }
-    else if ([ooVoo cameraResolutionLevel] == ooVooCameraResolutionMedium)
+    else if ([segue.identifier isEqualToString:@"ShowDetail"])
     {
-        resolutionText = @"Med";
+        NSIndexPath *selectedIndexPath = [self.collectionView indexPathsForSelectedItems][0];
+        Participant *participant = [self.participantsController participantAtIndex:selectedIndexPath.row];
+        ParticipantDetailViewController *participantDetailViewController = [segue destinationViewController];
+        participantDetailViewController.participant = participant;
+    }
+    else if ([segue.identifier isEqualToString:@"Messages"])
+    {
+        MessagesViewController *messagesViewController;
+        UINavigationController *navigationController = segue.destinationViewController;
+        messagesViewController = navigationController.viewControllers[0];
+        messagesViewController.messagesController = self.messagesController;
+    }
+}
+
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if ([identifier isEqualToString:@"ShowDetail"])
+    {
+        NSIndexPath *selectedIndexPath = [self.collectionView indexPathsForSelectedItems][0];
+        Participant *participant = [self.participantsController participantAtIndex:selectedIndexPath.row];
+        if (participant.state != ooVooVideoOn)
+        {
+            return NO;
+        }
     }
     
-    return resolutionText;
+    return YES;
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -239,27 +230,11 @@ static NSString *kCellIdentifier = @"VIDEO_CELL";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    VideoCollectionViewCell *cell = (VideoCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:kCellIdentifier forIndexPath:indexPath];
+    VideoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VIDEO_CELL" forIndexPath:indexPath];
     
-    [self configureCell:cell atIndexPath:indexPath];
-    return cell;
-}
-
-- (void)configureCell:(VideoCollectionViewCell *)cell atIndexPath:(NSIndexPath *)indexPath
-{
     Participant *participant = [self.participantsController participantAtIndex:indexPath.row];
     cell.avatarImgView.image = [UIImage imageNamed:@"user.png"];
     cell.userNameLabel.text = participant.displayName;
-
-    ooVooVideoView *videoView;
-    if ([self.zoomedParticipantID isEqualToString:participant.participantID])
-    {
-        videoView = self.fullScreenVideoView;
-    }
-    else
-    {
-        videoView = cell.videoView;
-    }
     
     switch (participant.state)
     {
@@ -269,32 +244,36 @@ static NSString *kCellIdentifier = @"VIDEO_CELL";
             [[ooVooController sharedController] receiveParticipantVideo:YES forParticipantID:participant.participantID];
             break;
         case ooVooVideoOn:
-            videoView.supportOrientation = (indexPath.row != 0);
-            [videoView associateToID:participant.participantID];
-            [cell hideAvatar];
-            [cell hideState];
+            {
+                NSUInteger maskUI  = [self supportedInterfaceOrientations];
+                NSUInteger maskApp = [[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:self.view.window];
+                NSUInteger mask = maskUI & maskApp;
+                BOOL isRotationSupported = !( UIDeviceOrientationIsPortrait(mask) || UIDeviceOrientationIsLandscape(mask));
+                BOOL isPreview = (indexPath.row == 0);
+                
+                cell.videoView.preview  = isPreview;
+                cell.videoView.mirrored = (isPreview && [ooVooController sharedController].currentCamera == ooVooFrontCamera);
+                cell.videoView.supportOrientation = (isRotationSupported ? isPreview : !isPreview);
+                
+                [cell.videoView associateToID:participant.participantID];
+                [cell hideAvatar];
+                [cell hideState];
+            }
             break;
         case ooVooVideoOff:
             [cell showAvatar];
-            [videoView clear];
+            [cell.videoView clear];
             [cell hideState];
-            if (videoView == self.fullScreenVideoView) { [self zoomOut:nil]; }
             break;
         case ooVooVideoPaused:
             [cell showAvatar];
-            [videoView clear];
-            [cell showState:@"Video cannot be viewed"];
-            if (videoView == self.fullScreenVideoView) { [self zoomOut:nil]; }
+            [cell.videoView clear];
+            [cell showState:NSLocalizedString(@"Video cannot be viewed", nil)];
         default:
             break;
     }
-}
-
-#pragma mark - UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    Participant *participant = [self.participantsController participantAtIndex:indexPath.row];
-    [self zoomIn:participant];
+    
+    return cell;
 }
 
 #pragma mark - ParticipantsControllerDelegate
@@ -306,7 +285,7 @@ static NSString *kCellIdentifier = @"VIDEO_CELL";
 - (void)controller:(ParticipantsController *)controller didChangeParticipant:(Participant *)aParticipant atIndexPath:(NSIndexPath *)indexPath forChangeType:(ParticipantChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
     __weak UICollectionView *collectionView = self.collectionView;
-
+    
     switch (type)
     {
         case ParticipantChangeInsert:
@@ -335,119 +314,7 @@ static NSString *kCellIdentifier = @"VIDEO_CELL";
 - (void)controllerDidChangeContent:(ParticipantsController *)controller
 {
     [self.collectionView performBatchUpdates:^{ [self.blockOperation start]; }
-                                      completion:nil];
-}
-
-#pragma mark - Zoom
-- (void)zoomIn:(Participant *)participant
-{
-    if (participant.state != ooVooVideoOn) return;
-    
-    self.zoomedParticipantID = participant.participantID;
-    NSUInteger index = [self.participantsController indexOfParticipantWithId:self.zoomedParticipantID];
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-    
-    UITapGestureRecognizer *singleTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zoomOut:)];
-    singleTapGestureRecognizer.numberOfTapsRequired = 1;
-    
-    UICollectionViewLayoutAttributes *attributes = [self.collectionView layoutAttributesForItemAtIndexPath:indexPath];
-    CGRect cellRect = attributes.frame;
-    
-    cellRect = [self.collectionView convertRect:cellRect toView:self.view];
-    
-    self.fullScreenVideoView = [[ooVooVideoView alloc] initWithFrame:cellRect];
-    self.fullScreenVideoView.fitVideoMode = NO;
-    self.fullScreenVideoView.animateRotation = YES;
-    self.fullScreenVideoView.supportOrientation = !(participant.isMe);
-    self.fullScreenVideoView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleRightMargin;
-    
-    [self.fullScreenVideoView addGestureRecognizer:singleTapGestureRecognizer];
-    
-    [self.view addSubview:self.fullScreenVideoView];
-    [self.fullScreenVideoView associateToID:self.zoomedParticipantID];
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        
-        [self.navigationController setToolbarHidden:YES animated:YES];
-        [self.navigationController setNavigationBarHidden:YES animated:YES];
-        
-        self.fullScreenVideoView.frame = self.view.frame;
-    }];
-}
-
-- (void)zoomOut:(UITapGestureRecognizer *)gestureRecognizer
-{
-    CGRect cellRect = CGRectZero;
-    NSUInteger row = [self.participantsController indexOfParticipantWithId:self.zoomedParticipantID];
-    
-    if (row != NSNotFound)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:row inSection:0];
-        UICollectionViewLayoutAttributes *attributes = [self.collectionView layoutAttributesForItemAtIndexPath:indexPath];
-        cellRect = attributes.frame;
-    }
-    
-    [UIView animateWithDuration:0.25 animations:^{
-        
-        [self.navigationController setToolbarHidden:NO animated:YES];
-        [self.navigationController setNavigationBarHidden:NO animated:YES];
-        
-        self.fullScreenVideoView.frame = cellRect;
-        
-    } completion:^(BOOL finished){
-        
-        if (gestureRecognizer) [self.fullScreenVideoView removeGestureRecognizer:gestureRecognizer];
-        [self.fullScreenVideoView clear];
-        [self.fullScreenVideoView removeFromSuperview];
-        self.fullScreenVideoView = nil;
-        
-        NSUInteger currentRow = [self.participantsController indexOfParticipantWithId:self.zoomedParticipantID];
-        self.zoomedParticipantID = nil;
-        
-        if (currentRow != NSNotFound)
-        {
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:currentRow inSection:0];
-            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        }
-    }];
-}
-
-- (void)participantDidLeave:(NSNotification *)notification
-{
-    CGRect cellRect = CGRectZero;
-    NSString *ParticipantID = [notification.userInfo objectForKey:OOVOOParticipantIdKey];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (self.fullScreenVideoView != nil){
-            if ([ParticipantID isEqualToString:self.zoomedParticipantID]){
-                [UIView animateWithDuration:0.25 animations:^{
-                    
-                    [self.navigationController setToolbarHidden:NO animated:YES];
-                    [self.navigationController setNavigationBarHidden:NO animated:YES];
-                    
-                    self.fullScreenVideoView.frame = cellRect;
-                    
-                } completion:^(BOOL finished){
-                    [self.fullScreenVideoView clear];
-                    [self.fullScreenVideoView removeFromSuperview];
-                    self.zoomedParticipantID = nil;
-                    self.fullScreenVideoView = nil;
-                }];
-            }
-        }
-    });
-}
-
-#pragma mark - UIPopoverControllerDelegate
-- (void)popoverControllerDidDismissPopover:(UIPopoverController *)popoverController
-{
-    if (popoverController == self.infoPopoverController)
-    {
-        self.infoPopoverController = nil;
-    }
-    else if (popoverController == self.alertsPopoverController)
-    {
-        self.alertsPopoverController = nil;
-    }
+                                  completion:nil];
 }
 
 @end

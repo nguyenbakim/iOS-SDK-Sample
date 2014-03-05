@@ -3,10 +3,11 @@
 // 
 // Created by ooVoo on July 22, 2013
 //
-// © 2013 ooVoo, LLC.  License under Apache 2.0 license. http://www.apache.org/licenses/LICENSE-2.0.html 
+// © 2013 ooVoo, LLC.  Used under license. 
 //
 
 #import "ParticipantsController.h"
+#import "MessagesController.h"
 #import "ooVooController.h"
 
 @implementation Participant
@@ -110,7 +111,7 @@
         [self.delegate controllerWillChangeContent:self];
         
         Participant *me = [[Participant alloc] init];
-        me.displayName = @"Me";
+        me.displayName = NSLocalizedString(@"Me", nil);
         me.participantID = myParticipantID;
         me.state = ooVooVideoUninitialized;
         me.isMe = YES;
@@ -130,27 +131,27 @@
         
         NSDictionary *userInfo = notification.userInfo;
         NSString *participantID = userInfo[OOVOOParticipantIdKey];
+        NSString *displayName = userInfo[OOVOOParticipantInfoKey];
         
-        Participant *participantToAdd = self.participantsByID[participantID];
+        [self.delegate controllerWillChangeContent:self];
         
+        Participant *participantToAdd = [[Participant alloc] init];
+        participantToAdd.participantID = participantID;
+        participantToAdd.displayName = displayName;
+        participantToAdd.state = ooVooVideoUninitialized;
+
+        MessagesController *msgController = [[MessagesController alloc] init];
+        msgController.participantID = participantID;
+        msgController.participantsController = self;
+        participantToAdd.messagesController = msgController;
         
-        if (participantToAdd == nil)
-        {
-            [self.delegate controllerWillChangeContent:self];
-            
-            Participant *participant = [[Participant alloc] init];
-            participant.participantID = userInfo[OOVOOParticipantIdKey];
-            participant.displayName = userInfo[OOVOOParticipantInfoKey];
-            participant.state = ooVooVideoUninitialized;
-            
-            [self.participants addObject:participant];
-            self.participantsByID[userInfo[OOVOOParticipantIdKey]] = participant;
-            
-            NSUInteger index = [self.participants indexOfObject:participant];
-            [self.delegate controller:self didChangeParticipant:participant atIndexPath:nil forChangeType:ParticipantChangeInsert newIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
-            [self.delegate controllerDidChangeContent:self];
-        }
+        self.participantsByID[participantID] = participantToAdd;
+        [self.participants addObject:participantToAdd];
         
+        NSUInteger index = [self.participants indexOfObject:participantToAdd];
+        [self.delegate controller:self didChangeParticipant:participantToAdd atIndexPath:nil forChangeType:ParticipantChangeInsert newIndexPath:[NSIndexPath indexPathForRow:index inSection:0]];
+        [self.delegate controllerDidChangeContent:self];
+
     });
 }
 
@@ -207,14 +208,16 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        Participant *participant = [self.participants objectAtIndex:0];
-        [self.delegate controllerWillChangeContent:self];
-        
-        participant.state = ooVooVideoOff;
-        [self.delegate controller:self didChangeParticipant:participant atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] forChangeType:ParticipantChangeUpdate newIndexPath:nil];
-        
-        [self.delegate controllerDidChangeContent:self];
-        
+        if (self.participants.count > 0)
+        {
+            Participant *participant = [self.participants objectAtIndex:0];
+            [self.delegate controllerWillChangeContent:self];
+            
+            participant.state = ooVooVideoOff;
+            [self.delegate controller:self didChangeParticipant:participant atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] forChangeType:ParticipantChangeUpdate newIndexPath:nil];
+            
+            [self.delegate controllerDidChangeContent:self];
+        }
     });
 }
 
@@ -222,17 +225,17 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        Participant *participant = [self.participants objectAtIndex:0];
-        [self.delegate controllerWillChangeContent:self];
-        
-        participant.state = ooVooVideoOn;
-        [self.delegate controller:self didChangeParticipant:participant atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] forChangeType:ParticipantChangeUpdate newIndexPath:nil];
-        
-        [self.delegate controllerDidChangeContent:self];
-        
+        if (self.participants.count>0)
+        {
+            Participant *participant = [self.participants objectAtIndex:0];
+            [self.delegate controllerWillChangeContent:self];
+            
+            participant.state = ooVooVideoOn;
+            [self.delegate controller:self didChangeParticipant:participant atIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] forChangeType:ParticipantChangeUpdate newIndexPath:nil];
+            
+            [self.delegate controllerDidChangeContent:self];
+        }
     });
 }
 
-
 @end
-

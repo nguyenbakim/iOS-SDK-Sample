@@ -3,16 +3,18 @@
 // 
 // Created by ooVoo on July 22, 2013
 //
-// © 2013 ooVoo, LLC.  License under Apache 2.0 license. http://www.apache.org/licenses/LICENSE-2.0.html 
+// © 2013 ooVoo, LLC.  Used under license. 
 //
 
 #import "ParticipantsController.h"
-#import "LogsController.h"
 
 @interface ConferenceViewController : UICollectionViewController <ParticipantsControllerDelegate>
 
-@property (nonatomic, strong) ParticipantsController *participantsController;
-@property (nonatomic, strong) LogsController *logsController;
 @property (nonatomic, copy) NSString *conferenceId;
+@property (nonatomic, copy) NSString *participantId;
+@property (nonatomic, copy) NSString *participantInfo;
+
+- (IBAction)leaveConference:(id)sender;
+- (IBAction)showInformation:(id)sender;
 
 @end

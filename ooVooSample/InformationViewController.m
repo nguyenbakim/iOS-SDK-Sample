@@ -3,12 +3,12 @@
 // 
 // Created by ooVoo on July 22, 2013
 //
-// © 2013 ooVoo, LLC.  License under Apache 2.0 license. http://www.apache.org/licenses/LICENSE-2.0.html 
+// © 2013 ooVoo, LLC.  Used under license. 
 //
 
-#import "ConferenceViewController.h"
 #import "InformationViewController.h"
 #import "ooVooController.h"
+#import "SwitchCell.h"
 
 @implementation InformationViewController
 
@@ -16,7 +16,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Information";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(participantDidJoin:) name:OOVOOParticipantDidJoinNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(participantDidLeave:) name:OOVOOParticipantDidLeaveNotification object:nil];
@@ -41,47 +40,35 @@
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
-    static NSString *CellIdentifier = @"CustomCell";
-    
-    UITableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-
-    UISwitch *switcher;
-    if (cell == nil)
-    {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        switcher = [[UISwitch alloc] initWithFrame:CGRectZero];
-        [switcher addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
-        cell.accessoryView = switcher;
-        cell.textLabel.numberOfLines = 0;
-        cell.textLabel.adjustsFontSizeToFitWidth = YES;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    }
-    else
-    {
-        switcher = (UISwitch *)cell.accessoryView;
-    }
+    SwitchCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"SwitchCell"];
     
     Participant *participant = [self.participantsController participantAtIndex:indexPath.row];
 	cell.textLabel.text = participant.displayName;
-    switcher.on = (participant.state == ooVooVideoOn);
-    switcher.tag = indexPath.row;
+    cell.switcher.on = (participant.state == ooVooVideoOn);
+    cell.switcher.tag = indexPath.row;
+    if (![cell.switcher actionsForTarget:self forControlEvent:UIControlEventValueChanged])
+    {
+        [cell.switcher addTarget:self action:@selector(toggleSwitch:) forControlEvents:UIControlEventValueChanged];
+    }
     
 	return cell;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    return @"Participants";
+    return NSLocalizedString(@"Participants", nil);
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
-    return [NSString stringWithFormat:@"Conference ID: %@", self.conferenceId];
+    return [NSString stringWithFormat:NSLocalizedString(@"Conference ID: %@", nil), self.conferenceId];
 }
 
 #pragma mark - Actions
-- (void)toggleSwitch:(UISwitch *)aSwitch
+- (IBAction)toggleSwitch:(id)sender
 {
+    UISwitch *aSwitch = sender;
+    
     BOOL enable = aSwitch.isOn;
     NSUInteger index = aSwitch.tag;
     

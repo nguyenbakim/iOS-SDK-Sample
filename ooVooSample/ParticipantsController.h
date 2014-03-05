@@ -3,19 +3,20 @@
 // 
 // Created by ooVoo on July 22, 2013
 //
-// © 2013 ooVoo, LLC.  License under Apache 2.0 license. http://www.apache.org/licenses/LICENSE-2.0.html 
+// © 2013 ooVoo, LLC.  Used under license. 
 //
 
 #import "ooVooController.h"
 
 @class Participant;
+@class MessagesController;
 @protocol ParticipantsControllerDelegate;
 
 
 
 @interface ParticipantsController : NSObject
 
-@property(nonatomic, weak) id <ParticipantsControllerDelegate> delegate;
+@property (nonatomic, weak) id <ParticipantsControllerDelegate> delegate;
 - (NSInteger)numberOfParticipants;
 - (Participant *)participantAtIndex:(NSUInteger)index;
 
@@ -32,11 +33,12 @@
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, assign) ooVooVideoState state;
 @property (nonatomic, assign) BOOL isMe;
+@property (nonatomic, strong) MessagesController *messagesController; // direct messages
 
 @end
 
 
-
+    
 @protocol ParticipantsControllerDelegate
 
 typedef enum {

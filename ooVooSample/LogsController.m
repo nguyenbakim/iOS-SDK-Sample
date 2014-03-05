@@ -3,7 +3,7 @@
 // 
 // Created by ooVoo on July 22, 2013
 //
-// © 2013 ooVoo, LLC.  License under Apache 2.0 license. http://www.apache.org/licenses/LICENSE-2.0.html 
+// © 2013 ooVoo, LLC.  Used under license. 
 //
 
 #import "LogsController.h"
@@ -44,6 +44,8 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         [nc addObserver:self selector:@selector(userDidUnmuteSpeaker:) name:OOVOOUserDidUnmuteSpeakerNotification object:nil];
         
         [nc addObserver:self selector:@selector(connectionStatisticsDidUpdate:) name:OOVOOConnectionStatisticsNotification object:nil];
+        
+        [nc addObserver:self selector:@selector(userDidReceiveMessage:) name:OOVOOInCallMessageNotification object:nil];
     }
     
     return self;
@@ -183,8 +185,15 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
     outboundBandwidth = [info[OOVOOStatisticsOutboundBandwidthKey] integerValue];
     outboundPacketLoss = [info[OOVOOStatisticsOutboundPacketLossKey] doubleValue];
     
-    DDLogInfo(@"%@ Connection statistics updated. Inbound packet loss:%d, Outbound packet loss:%d, Inbound bandwidth:%d",
-              [self timestamp], inboundPacketLoss, outboundPacketLoss, inboundBandwidth);
+   // DDLogInfo(@"%@ Connection statistics updated. Inbound packet loss:%d, Outbound packet loss:%d, Inbound bandwidth:%d",
+     //         [self timestamp], inboundPacketLoss, outboundPacketLoss, inboundBandwidth);
 }
 
+- (void)userDidReceiveMessage:(NSNotification *)notification
+{
+    NSString *participantId = notification.userInfo[OOVOOParticipantIdKey];
+    NSData *message = notification.userInfo[OOVOOParticipantInfoKey];
+
+    DDLogInfo(@"%@ Message from %@> %@", [self timestamp], participantId, [NSString stringWithUTF8String:[message bytes]]);
+}
 @end
