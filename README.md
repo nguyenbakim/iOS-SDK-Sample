@@ -6,7 +6,7 @@ This is the basic iOS Sample Application for the ooVoo SDK. It will let you crea
 
 This is released under an Apache 2.0 License.
 
-This requires use of the [ooVoo iOS SDK](http://www.oovoo.com/SDK) which is separately licensed. 
+This requires use of the [ooVoo iOS SDK](http://developer.oovoo.com) which is separately licensed. 
 
 ## Getting the SDK
 Please visit [ooVoo SDK site](http://developer.oovoo.com) to register and obtain a development token and AppID.
