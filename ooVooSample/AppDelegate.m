@@ -38,8 +38,29 @@ static NSString *kDefaultBackEndURL = @DEFAULT_BACK_END_URL;
     if (result != ooVooInitResultOk)
     {
         NSLog(@"ooVoo SDK initialization failed with result %d", result);
+
+        NSString *reason;
+        if (result == ooVooInitResultInvalidAppId) {
+            reason = @"AppID invalid, might be empty.\n\nGet your App ID and App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @DEFAULT_APP_ID and @DEFAULT_APP_TOKEN constants in code.";
+        } else {
+            reason = [[ooVooController sharedController] errorMessageForOoVooInitResult:result];
+        }
+        
+        double delayInSeconds = 0.75;
+        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+            
+        //[self.presentingViewController dismissViewControllerAnimated:NO completion:^{
+       
+        [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk - Init"
+                            message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), reason]
+                            delegate:nil
+                            cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                            otherButtonTitles:nil] show];
+                
+            //}];
+        });
     }
-    
     return YES;
 }
 

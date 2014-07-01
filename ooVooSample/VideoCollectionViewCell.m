@@ -43,7 +43,7 @@
     self.avatarImgView.contentMode = UIViewContentModeScaleAspectFit;
     [self.contentView addSubview:self.avatarImgView];
     
-    self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, frame.size.height * 4 / 5, frame.size.width, frame.size.height/5)];
+    self.userNameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0/*frame.size.height * 4 / 5*/, frame.size.width, frame.size.height/5)];
     self.userNameLabel.textAlignment = NSTextAlignmentCenter;
     self.userNameLabel.textColor = [UIColor blackColor];
     self.userNameLabel.font = [UIFont boldSystemFontOfSize:12.0];
