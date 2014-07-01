@@ -17,4 +17,4 @@ If you need help with the SDK or this app you can find us on [#ooVoo on freenode
 ## Instructions
 After you have downloaded the SDK bundle, copy the oovoo.framework file into your root directory. To authenticate, you can either pre-populate your credentials in **Classes -> Supporting Files -> LoginParameters.h** with your AppID, Token, Back-end URL and ConferenceID or when **ooVooSample** is running, go to **Settings**, scroll down your list of apps until you see **ooVooSample**, tap it  and put in your credentials.
 
-Most problems with authentication can be easily solved by killing the app (i.e. double tap home screen and flick the app up) and the check your credentials in the file or copy/paste them into settings again and restart the app. 
+Most problems with authentication can be easily solved by killing the app (i.e. double tap home screen and flick the app up) and then checking your credentials in the file or copy/paste them into settings again and restart the app. 
