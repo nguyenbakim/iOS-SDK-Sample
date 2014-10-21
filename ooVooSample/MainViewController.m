@@ -12,6 +12,7 @@
 
 #import "ooVooController.h"
 #import "LoginParameters.h"
+#import "ooVooVideoView.h"
 
 static NSString *kDefaultConferenceId = @DEFAULT_CONFERENCE_ID;
 
@@ -22,6 +23,9 @@ static NSString *kDefaultConferenceId = @DEFAULT_CONFERENCE_ID;
 @property (nonatomic, copy) NSString *participantInfo;
 @property (nonatomic, copy) NSString *participantId;
 @property (nonatomic, assign) UITextField *currentTextField;
+@property (nonatomic, strong) ooVooVideoView *preview;
+@property(nonatomic, strong) UIImageView *avatarImgView;
+@property (nonatomic, assign) CGFloat contentOffsetY;
 
 @end
 
@@ -36,18 +40,107 @@ LoginRow;
 
 @implementation MainViewController
 
+- (void)configurePreview
+{
+    NSUInteger maskUI  = [self supportedInterfaceOrientations];
+    NSUInteger maskApp = [[UIApplication sharedApplication] supportedInterfaceOrientationsForWindow:self.view.window];
+    NSUInteger mask = maskUI & maskApp;
+    BOOL isRotationSupported = !( UIDeviceOrientationIsPortrait(mask) || UIDeviceOrientationIsLandscape(mask));
+    BOOL isPreview = YES;
+    
+    [[ooVooController sharedController] selectCamera:ooVooFrontCamera];
+    
+    self.preview.fitVideoMode = YES;
+    self.preview.supportOrientation = (isRotationSupported ? isPreview : !isPreview);
+    ooVooCameraDevice camera = [ooVooController sharedController].currentCamera;
+    self.preview.mirrored =(isPreview && (camera == ooVooFrontCamera));
+    self.preview.preview = isPreview;
+}
+
+- (void)layoutPreview
+{
+    if (self.contentOffsetY == 0) {
+        self.contentOffsetY = self.tableView.contentOffset.y;
+    }
+
+    CGRect frame = self.preview.frame;
+
+    frame.origin.y = self.view.bounds.origin.y - self.tableView.contentOffset.y + self.tableView.contentSize.height;
+    frame.size.height = self.view.bounds.size.height + self.contentOffsetY - self.tableView.contentSize.height;
+
+    self.preview.frame = frame;
+    self.avatarImgView.frame = frame;
+}
 - (void)viewDidLoad
 {
-    [super viewDidLoad];    
+    [super viewDidLoad];
     self.conferenceId = kDefaultConferenceId;
     self.participantInfo = [[UIDevice currentDevice] name];
     self.participantId = [NSString stringWithFormat:@"iOS-%i", arc4random()];
+    
+    self.preview = [[ooVooVideoView alloc] initWithFrame:self.view.bounds];
+    
+    [self configurePreview];
+    
+    self.preview.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleRightMargin;
+    
+    [self.view addSubview:self.preview];
+    
+    self.avatarImgView = [[UIImageView alloc] initWithFrame:self.view.bounds];
+    self.avatarImgView.image = [UIImage imageNamed:@"user.png"];
+    self.avatarImgView.autoresizingMask = UIViewAutoresizingFlexibleHeight|UIViewAutoresizingFlexibleWidth|UIViewAutoresizingFlexibleLeftMargin|UIViewAutoresizingFlexibleBottomMargin|UIViewAutoresizingFlexibleTopMargin|UIViewAutoresizingFlexibleRightMargin;
+    [self.view addSubview:self.avatarImgView];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self.tableView reloadData];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStart:) name:OOVOOPreviewDidStartNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraDidStart:) name:OOVOOCameraDidStartNotification object:nil];
+    
+    [ooVooController sharedController].cameraEnabled = YES;
+    
+    [self layoutPreview];
+}
+
+- (void) viewDidAppear:(BOOL) animated
+{
+    [super viewDidAppear:animated];
+    
+    [self layoutPreview];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOPreviewDidStartNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOCameraDidStartNotification object:nil];
+}
+
+- (void)cameraDidStart:(NSNotification *)notification
+{
+    NSNumber *errorNumber = notification.userInfo[OOVOOErrorKey];
+    BOOL ok = (errorNumber.intValue == 0);
+    
+    [ooVooController sharedController].previewEnabled = ok;
+    [ooVooController sharedController].transmitEnabled = ok;
+}
+
+- (void)videoDidStart:(NSNotification *)notification
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        [self configurePreview];
+        [self.preview associateToID:@""];
+        [self.avatarImgView setHidden:YES];
+    });
+}
+
+- (void)willAnimateRotationToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation duration:(NSTimeInterval)duration
+{
+    [self layoutPreview];
 }
 
 #pragma mark - UITableViewDataSource

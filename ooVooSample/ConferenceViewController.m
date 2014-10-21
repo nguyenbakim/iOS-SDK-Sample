@@ -58,9 +58,23 @@
                                                  name:OOVOOConferenceDidEndNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cameraDidStart:)
+                                                 name:OOVOOCameraDidStartNotification
+                                               object:nil];
+    
     [[ooVooController sharedController] joinConference:self.conferenceId
                                          participantId:self.participantId
                                        participantInfo:self.participantInfo];
+}
+
+- (void)cameraDidStart:(NSNotification *)notification
+{
+    NSNumber *errorNumber = notification.userInfo[OOVOOErrorKey];
+    BOOL ok = (errorNumber.intValue == 0);
+
+    [ooVooController sharedController].previewEnabled = ok;
+    [ooVooController sharedController].transmitEnabled = ok;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -233,6 +247,10 @@
     VideoCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"VIDEO_CELL" forIndexPath:indexPath];
     
     Participant *participant = [self.participantsController participantAtIndex:indexPath.row];
+    
+    if (participant == nil)
+        return cell;
+    
     cell.avatarImgView.image = [UIImage imageNamed:@"user.png"];
     cell.userNameLabel.text = participant.displayName;
     
@@ -258,6 +276,7 @@
                 [cell.videoView associateToID:participant.participantID];
                 [cell hideAvatar];
                 [cell hideState];
+                [cell.videoView showVideo:YES];
             }
             break;
         case ooVooVideoOff:
@@ -296,7 +315,11 @@
             
         case ParticipantChangeDelete:
         {
-            [self.blockOperation addExecutionBlock:^{ [collectionView deleteItemsAtIndexPaths:@[indexPath]]; }];
+            if ([self.collectionView cellForItemAtIndexPath:indexPath]) {
+                [self.blockOperation addExecutionBlock:^{ [collectionView deleteItemsAtIndexPaths:@[indexPath]]; }];
+            } else {
+                [self.collectionView reloadData];
+            }
             break;
         }
             

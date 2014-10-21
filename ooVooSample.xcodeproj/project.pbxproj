@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0B19B66317414E52002B092B /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BEF892817391F6C006091DB /* AudioToolbox.framework */; };
 		0B693D311765CE3200752140 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B693D301765CE3200752140 /* CoreTelephony.framework */; };
+		0B6E87AB198A245500A62722 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6E87AA198A245500A62722 /* Accelerate.framework */; };
+		0B6E87AD198A246200A62722 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B6E87AC198A246200A62722 /* CFNetwork.framework */; };
+		0B8C8FC719A22FFA008732FB /* FileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B8C8FC619A22FFA008732FB /* FileLogger.m */; };
 		0BB65CB01740C63E00EE3BBC /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BB65CAF1740C63E00EE3BBC /* AVFoundation.framework */; };
 		2767A6F0178BE9DD00D0283E /* libc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2767A6EC178BE97B00D0283E /* libc++.dylib */; };
 		27A5E85F174E6EB9008BE005 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A5E85E174E6EB9008BE005 /* CoreVideo.framework */; };
@@ -105,6 +108,10 @@
 
 /* Begin PBXFileReference section */
 		0B693D301765CE3200752140 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		0B6E87AA198A245500A62722 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		0B6E87AC198A246200A62722 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		0B8C8FC519A22FFA008732FB /* FileLogger.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FileLogger.h; sourceTree = "<group>"; };
+		0B8C8FC619A22FFA008732FB /* FileLogger.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FileLogger.m; sourceTree = "<group>"; };
 		0BB65CAF1740C63E00EE3BBC /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		0BEF892817391F6C006091DB /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		2767A6EC178BE97B00D0283E /* libc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.dylib"; path = "usr/lib/libc++.dylib"; sourceTree = SDKROOT; };
@@ -240,6 +247,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0B6E87AD198A246200A62722 /* CFNetwork.framework in Frameworks */,
+				0B6E87AB198A245500A62722 /* Accelerate.framework in Frameworks */,
 				A94AA86A189A99E90092289F /* oovoo.framework in Frameworks */,
 				2767A6F0178BE9DD00D0283E /* libc++.dylib in Frameworks */,
 				A11A73FE17735E5100D0C722 /* libz.dylib in Frameworks */,
@@ -291,6 +300,8 @@
 		7CB4E206173168D900ABBA55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0B6E87AC198A246200A62722 /* CFNetwork.framework */,
+				0B6E87AA198A245500A62722 /* Accelerate.framework */,
 				A94AA869189A99E90092289F /* oovoo.framework */,
 				2767A6EC178BE97B00D0283E /* libc++.dylib */,
 				A11A73FD17735E5100D0C722 /* libz.dylib */,
@@ -315,6 +326,8 @@
 			children = (
 				7CB4E216173168D900ABBA55 /* AppDelegate.h */,
 				7CB4E217173168D900ABBA55 /* AppDelegate.m */,
+				0B8C8FC519A22FFA008732FB /* FileLogger.h */,
+				0B8C8FC619A22FFA008732FB /* FileLogger.m */,
 				899A40811863349600340FE9 /* MainStoryboard_iPhone.storyboard */,
 				89F7387C185F3CAF00DF8124 /* MainStoryboard_iPad.storyboard */,
 				7CB4E232173316EA00ABBA55 /* Sources */,
@@ -710,6 +723,7 @@
 				7CB4E218173168D900ABBA55 /* AppDelegate.m in Sources */,
 				8933601C18620E7000508A76 /* UIImage+JSMessagesView.m in Sources */,
 				7CB4E23C1734194200ABBA55 /* MainViewController.m in Sources */,
+				0B8C8FC719A22FFA008732FB /* FileLogger.m in Sources */,
 				7C02C6AD173AFE2D00C6D482 /* ConferenceViewController.m in Sources */,
 				8933602418620E7000508A76 /* JSMessagesViewController.m in Sources */,
 				7C299759173C0AD900D873C1 /* AlertsViewController.m in Sources */,
@@ -760,9 +774,8 @@
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -799,9 +812,7 @@
 				CODE_SIGN_IDENTITY = "";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_PREPROCESSOR_DEFINITIONS = PRODUCTION_BUILD;
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
@@ -826,11 +837,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../../3rdparty/lib/ios\"",
+					"\"$(SRCROOT)/../../../3rdparty/platform\"",
 					../,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ooVooSample/ooVooSample-Prefix.pch";
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				INFOPLIST_FILE = "ooVooSample/ooVooSample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = ooVooSample;
@@ -847,11 +859,12 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/../../../3rdparty/lib/ios\"",
+					"\"$(SRCROOT)/../../../3rdparty/platform\"",
 					../,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ooVooSample/ooVooSample-Prefix.pch";
-				GCC_SYMBOLS_PRIVATE_EXTERN = YES;
 				INFOPLIST_FILE = "ooVooSample/ooVooSample-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				PRODUCT_NAME = ooVooSample;

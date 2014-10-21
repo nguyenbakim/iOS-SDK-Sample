@@ -35,8 +35,8 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         [nc addObserver:self selector:@selector(participantDidLeave:) name:OOVOOParticipantDidLeaveNotification object:nil];
         [nc addObserver:self selector:@selector(participantDidChange:) name:OOVOOParticipantVideoStateDidChangeNotification object:nil];
         
-        [nc addObserver:self selector:@selector(videoDidStop:) name:OOVOOVideoDidStopNotification object:nil];
-        [nc addObserver:self selector:@selector(videoDidStart:) name:OOVOOVideoDidStartNotification object:nil];
+        [nc addObserver:self selector:@selector(videoDidStop:) name:OOVOOPreviewDidStopNotification object:nil];
+        [nc addObserver:self selector:@selector(videoDidStart:) name:OOVOOPreviewDidStartNotification object:nil];
         
         [nc addObserver:self selector:@selector(userDidMuteMicrophone:) name:OOVOOUserDidMuteMicrophoneNotification object:nil];
         [nc addObserver:self selector:@selector(userDidUnmuteMicrophone:) name:OOVOOUserDidUnmuteMicrophoneNotification object:nil];
@@ -46,6 +46,10 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
         [nc addObserver:self selector:@selector(connectionStatisticsDidUpdate:) name:OOVOOConnectionStatisticsNotification object:nil];
         
         [nc addObserver:self selector:@selector(userDidReceiveMessage:) name:OOVOOInCallMessageNotification object:nil];
+        
+        [nc addObserver:self selector:@selector(userDidHeld:) name:OOVOO_OnHoldNotification object:nil];
+        [nc addObserver:self selector:@selector(userDidUnHeld:) name:OOVOO_OnUnHoldNotification object:nil];
+
     }
     
     return self;
@@ -196,4 +200,17 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
     DDLogInfo(@"%@ Message from %@> %@", [self timestamp], participantId, [NSString stringWithUTF8String:[message bytes]]);
 }
+
+- (void) userDidHeld:(NSNotification *) notification
+{
+    NSString *phone = notification.userInfo[OOVOO_OnHoldReasonKey];
+    DDLogInfo(@"%@ Hold, reason %@", [self timestamp], phone);
+}
+
+- (void) userDidUnHeld:(NSNotification *) notification
+{
+    NSString *phone = notification.userInfo[OOVOO_OnHoldReasonKey];
+    DDLogInfo(@"%@ Hold done, reason %@", [self timestamp], phone);
+}
+
 @end

@@ -49,12 +49,12 @@
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(videoDidStop:)
-                                                     name:OOVOOVideoDidStopNotification
+                                                     name:OOVOOPreviewDidStopNotification
                                                    object:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(videoDidStart:)
-                                                     name:OOVOOVideoDidStartNotification
+                                                     name:OOVOOPreviewDidStartNotification
                                                    object:nil];
     }
     
@@ -73,9 +73,13 @@
 
 - (Participant *)participantAtIndex:(NSUInteger)index
 {
-    return [self.participants objectAtIndex:index];
+    if ([self.participants count] > index)
+    {
+        return [self.participants objectAtIndex:index];
+    }
+    
+    return nil;
 }
-
 
 - (Participant *)participantWithId:(NSString *)participantId
 {
@@ -114,6 +118,7 @@
         me.displayName = NSLocalizedString(@"Me", nil);
         me.participantID = myParticipantID;
         me.state = ooVooVideoUninitialized;
+        me.switchState = ooVooVideoOn;
         me.isMe = YES;
         
         [self.participants addObject:me];
@@ -139,6 +144,7 @@
         participantToAdd.participantID = participantID;
         participantToAdd.displayName = displayName;
         participantToAdd.state = ooVooVideoUninitialized;
+        participantToAdd.switchState = ooVooVideoOn;
 
         MessagesController *msgController = [[MessagesController alloc] init];
         msgController.participantID = participantID;

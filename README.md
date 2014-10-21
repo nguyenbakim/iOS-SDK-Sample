@@ -1,4 +1,4 @@
-## iOS-SDK-Sample for SDK v1.2
+## iOS-SDK-Sample for SDK v1.3
 
 =================
 

@@ -32,6 +32,7 @@
     ooVooCameraDevice camera = [ooVooController sharedController].currentCamera;
     self.fullScreenVideoView.mirrored =(isPreview && (camera == ooVooFrontCamera));
     self.fullScreenVideoView.preview = isPreview;
+    [self.fullScreenVideoView showVideo:YES];
 }
 
 - (void)viewDidLoad
@@ -54,8 +55,8 @@
     
     if (self.participant.isMe)
     {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStop:) name:OOVOOVideoDidStopNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStart:) name:OOVOOVideoDidStartNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStop:) name:OOVOOPreviewDidStopNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStart:) name:OOVOOPreviewDidStartNotification object:nil];
     }
     else
     {
@@ -116,8 +117,8 @@
     
     if (self.participant.isMe)
     {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOVideoDidStopNotification object:nil];
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOVideoDidStartNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOPreviewDidStopNotification object:nil];
+        [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOPreviewDidStartNotification object:nil];
     }
     else
     {
@@ -125,7 +126,7 @@
         [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOParticipantVideoStateDidChangeNotification object:nil];
     }
 
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (IBAction)showFilters:(id)sender
@@ -152,6 +153,8 @@
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]])
         {
             self.filtersPopoverController = ((UIStoryboardPopoverSegue *)segue).popoverController;
+            UINavigationController *navigationController = segue.destinationViewController;
+            navigationController.navigationBar.translucent = NO;
         }
     }
     else if ([segue.identifier isEqualToString:@"DirectMessages"])

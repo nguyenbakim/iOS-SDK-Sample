@@ -43,8 +43,8 @@
 
 - (void)setupNotifications
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStop:) name:OOVOOVideoDidStopNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStart:) name:OOVOOVideoDidStartNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStop:) name:OOVOOPreviewDidStopNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStart:) name:OOVOOPreviewDidStartNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(microphoneDidChange:) name:OOVOOUserDidMuteMicrophoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(microphoneDidChange:) name:OOVOOUserDidUnmuteMicrophoneNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(speakerDidChange:) name:OOVOOUserDidMuteSpeakerNotification object:nil];
@@ -146,6 +146,7 @@
         camera = ooVooFrontCamera;
     }
     
+    self.resolutionBarButtonItem.enabled = NO;
     self.cameraBarButtonItem.enabled = NO;
     [[ooVooController sharedController] selectCamera:camera];
 }
@@ -162,6 +163,7 @@
     
     [actionSheet showFromToolbar:self];
     
+    self.cameraBarButtonItem.enabled = NO;
     self.resolutionBarButtonItem.enabled = NO;
 }
 
@@ -171,10 +173,16 @@
     if (buttonIndex != actionSheet.cancelButtonIndex)
     {
         ooVooCameraResolutionLevel level = [([[ooVooController sharedController] availableCameraResolutionLevels])[buttonIndex] integerValue];
-        [[ooVooController sharedController] setCameraResolutionLevel:level];
+        
+        if (level != [[ooVooController sharedController] cameraResolutionLevel]) {
+            [[ooVooController sharedController] setCameraResolutionLevel:level];
+            
+            return;
+        }
     }
 
     self.resolutionBarButtonItem.enabled = YES;
+    self.cameraBarButtonItem.enabled = YES;
 }
 
 #pragma mark - Notifications
@@ -214,8 +222,8 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
 
-        self.cameraBarButtonItem.enabled = NO;
-        self.resolutionBarButtonItem.enabled = NO;
+        self.cameraBarButtonItem.enabled = YES;
+        self.resolutionBarButtonItem.enabled = YES;
 
     });
 }

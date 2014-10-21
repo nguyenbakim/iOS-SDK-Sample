@@ -32,6 +32,7 @@
 @property (nonatomic, strong) NSString *participantID;
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, assign) ooVooVideoState state;
+@property (nonatomic, assign) ooVooVideoState switchState;
 @property (nonatomic, assign) BOOL isMe;
 @property (nonatomic, strong) MessagesController *messagesController; // direct messages
 
