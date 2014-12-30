@@ -9,13 +9,13 @@
 #import "MainViewController.h"
 #import "ConferenceViewController.h"
 #import "TextFieldCell.h"
+#import "AppDelegate.h"
 
 #import "ooVooController.h"
 #import "LoginParameters.h"
 #import "ooVooVideoView.h"
 
 static NSString *kDefaultConferenceId = @DEFAULT_CONFERENCE_ID;
-
 
 @interface MainViewController () <UITextFieldDelegate>
 
@@ -71,6 +71,7 @@ LoginRow;
     self.preview.frame = frame;
     self.avatarImgView.frame = frame;
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -99,7 +100,10 @@ LoginRow;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStart:) name:OOVOOPreviewDidStartNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(cameraDidStart:) name:OOVOOCameraDidStartNotification object:nil];
     
-    [ooVooController sharedController].cameraEnabled = YES;
+    AppDelegate *appDelegate = [[UIApplication sharedApplication] delegate];
+    if (appDelegate.isSdkInited) {
+        [ooVooController sharedController].cameraEnabled = YES;
+    }
     
     [self layoutPreview];
 }

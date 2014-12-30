@@ -12,6 +12,7 @@
 #import "LoginParameters.h"
 #import "FileLogger.h"
 
+
 #define APP_ID_SETTINGS_KEY       @"APP_ID_SETTINGS_KEY"
 #define APP_TOKEN_SETTINGS_KEY    @"APP_TOKEN_SETTINGS_KEY"
 #define BACKEND_URL_SETTINGS_KEY  @"BACKEND_URL_SETTINGS_KEY"
@@ -33,6 +34,8 @@ static NSString *kDefaultBackEndURL = @DEFAULT_BACK_END_URL;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
+    
     [self setupConnectionParameters];
 
     [FileLogger sharedInstance];
@@ -64,10 +67,11 @@ static NSString *kDefaultBackEndURL = @DEFAULT_BACK_END_URL;
                                 cancelButtonTitle:NSLocalizedString(@"OK", nil)
                                 otherButtonTitles:nil] show];
         });
+    } else {
+        self.isSdkInited = YES;
     }
     return YES;
 }
-
 
 - (void)applicationWillResignActive:(UIApplication *)application;
 {

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="4514" systemVersion="13C48" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="0fs-rM-dlC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="0fs-rM-dlC">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
-        <!--Main View Controller - ooVoo Sample-->
+        <!--ooVoo Sample-->
         <scene sceneID="844-RQ-YFS">
             <objects>
                 <tableViewController storyboardIdentifier="Main" title="ooVoo Sample" id="NxT-LT-mXZ" customClass="MainViewController" sceneMemberID="viewController">
@@ -53,7 +52,7 @@
             </objects>
             <point key="canvasLocation" x="75" y="-360"/>
         </scene>
-        <!--Navigation Controller - Conference-->
+        <!--Conference-->
         <scene sceneID="9ch-jr-t4Q">
             <objects>
                 <navigationController storyboardIdentifier="ConferenceNav" title="Conference" definesPresentationContext="YES" toolbarHidden="NO" id="9J4-Vr-C6E" sceneMemberID="viewController">
@@ -72,7 +71,7 @@
             </objects>
             <point key="canvasLocation" x="75" y="1095"/>
         </scene>
-        <!--Conference View Controller - Conference-->
+        <!--Conference-->
         <scene sceneID="JZf-kH-Eob">
             <objects>
                 <collectionViewController storyboardIdentifier="Conference" autoresizesArchivedViewToFullSize="NO" title="Conference" id="N2M-Lv-gdJ" customClass="ConferenceViewController" sceneMemberID="viewController">
@@ -141,7 +140,6 @@
                         <subviews>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" barStyle="black" translatesAutoresizingMaskIntoConstraints="NO" id="G1f-Ma-57M" customClass="ConferenceToolbar">
                                 <rect key="frame" x="0.0" y="980" width="768" height="44"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                                 <items/>
                             </toolbar>
                         </subviews>
@@ -164,52 +162,7 @@
             </objects>
             <point key="canvasLocation" x="2759" y="1095"/>
         </scene>
-        <!--Information Segmented View Controller-->
-        <scene sceneID="xO4-2z-1OW">
-            <objects>
-                <viewController storyboardIdentifier="InfoSegmented" id="uMw-PE-GY3" customClass="InformationSegmentedViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="Cyg-Mn-gFj"/>
-                        <viewControllerLayoutGuide type="bottom" id="tYG-7H-UoT"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" horizontalHuggingPriority="1" verticalHuggingPriority="1" horizontalCompressionResistancePriority="1" verticalCompressionResistancePriority="1000" id="eAw-ba-D0m">
-                        <rect key="frame" x="0.0" y="64" width="320" height="736"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <containerView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Vq-o1-iZK">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="672"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                            </containerView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <navigationItem key="navigationItem" id="eGS-ow-Q3y">
-                        <nil key="title"/>
-                        <segmentedControl key="titleView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="jYr-JV-3WT">
-                            <rect key="frame" x="96" y="7" width="128" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <segments>
-                                <segment title="Info"/>
-                                <segment title="Alerts"/>
-                            </segments>
-                            <connections>
-                                <action selector="segmentChanged:" destination="uMw-PE-GY3" eventType="valueChanged" id="uyG-Ru-O4R"/>
-                            </connections>
-                        </segmentedControl>
-                    </navigationItem>
-                    <value key="contentSizeForViewInPopover" type="size" width="320" height="544"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <connections>
-                        <outlet property="segmentedControl" destination="jYr-JV-3WT" id="XRf-88-cYD"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wn1-95-P0M" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2538" y="3817"/>
-        </scene>
-        <!--Information View Controller - Info-->
+        <!--Info-->
         <scene sceneID="xTx-ci-wpr">
             <objects>
                 <tableViewController storyboardIdentifier="Info" title="Info" id="KaL-TI-5AO" customClass="InformationViewController" sceneMemberID="viewController">
@@ -241,53 +194,16 @@
                             <outlet property="delegate" destination="KaL-TI-5AO" id="Ipl-E3-xnw"/>
                         </connections>
                     </tableView>
+                    <navigationItem key="navigationItem" id="Sqj-he-cww"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="320" height="544"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="skT-Ea-2Xh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1820" y="3945"/>
+            <point key="canvasLocation" x="1596" y="3723"/>
         </scene>
-        <!--Alerts View Controller - Alerts-->
-        <scene sceneID="8ft-dp-Ufc">
-            <objects>
-                <viewController storyboardIdentifier="Alerts" title="Alerts" modalPresentationStyle="currentContext" id="L92-Hx-waK" customClass="AlertsViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="qDa-JU-ABm"/>
-                        <viewControllerLayoutGuide type="bottom" id="xHZ-be-qSg"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="gLR-uj-mKn">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="608"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r0J-re-Ntl">
-                                <rect key="frame" x="0.0" y="0.0" width="320" height="608"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="trailing" secondItem="r0J-re-Ntl" secondAttribute="trailing" id="G99-eM-787"/>
-                            <constraint firstItem="xHZ-be-qSg" firstAttribute="top" secondItem="r0J-re-Ntl" secondAttribute="bottom" id="NVc-mY-b3N"/>
-                            <constraint firstItem="r0J-re-Ntl" firstAttribute="top" secondItem="gLR-uj-mKn" secondAttribute="top" id="VW8-aZ-cVg"/>
-                            <constraint firstItem="r0J-re-Ntl" firstAttribute="leading" secondItem="gLR-uj-mKn" secondAttribute="leading" id="r19-RT-nz8"/>
-                        </constraints>
-                    </view>
-                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <value key="contentSizeForViewInPopover" type="size" width="320" height="608"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <connections>
-                        <outlet property="alertsTextView" destination="r0J-re-Ntl" id="O8a-uj-MI4"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jzz-Sy-nZl" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3068" y="3881"/>
-        </scene>
-        <!--Navigation Controller - Main-->
+        <!--Main-->
         <scene sceneID="p6B-zP-rba">
             <objects>
                 <navigationController storyboardIdentifier="MainNav" title="Main" definesPresentationContext="YES" id="0fs-rM-dlC" sceneMemberID="viewController">
@@ -309,20 +225,21 @@
                     <toolbarItems/>
                     <value key="contentSizeForViewInPopover" type="size" width="320" height="544"/>
                     <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="768" height="1024"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="DQp-Vr-RH8">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="uMw-PE-GY3" kind="relationship" relationship="rootViewController" id="aHZ-v7-opF"/>
+                        <segue destination="KaL-TI-5AO" kind="relationship" relationship="rootViewController" id="wBb-AM-z3l"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pHj-2h-309" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1596" y="2676"/>
         </scene>
-        <!--Messages View Controller - Messages-->
+        <!--Messages-->
         <scene sceneID="Fhf-Wb-SIb">
             <objects>
                 <viewController storyboardIdentifier="Messages" title="Messages" id="c1T-4Q-po1" customClass="MessagesViewController" sceneMemberID="viewController">
@@ -347,7 +264,7 @@
             </objects>
             <point key="canvasLocation" x="3664" y="-477"/>
         </scene>
-        <!--Navigation Controller - MessagesNav-->
+        <!--MessagesNav-->
         <scene sceneID="z31-5I-TVh">
             <objects>
                 <navigationController storyboardIdentifier="MessagesNav" title="MessagesNav" automaticallyAdjustsScrollViewInsets="NO" id="rDV-1L-rFz" sceneMemberID="viewController">
@@ -365,7 +282,7 @@
             </objects>
             <point key="canvasLocation" x="2714" y="-469"/>
         </scene>
-        <!--Filters View Controller - Filters-->
+        <!--Filters-->
         <scene sceneID="nrp-rN-v1o">
             <objects>
                 <tableViewController storyboardIdentifier="Filters" id="tUQ-Wv-SAA" customClass="FiltersViewController" sceneMemberID="viewController">

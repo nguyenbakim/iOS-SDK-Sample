@@ -7,12 +7,11 @@
 //
 
 #import "ConferenceViewController.h"
-#import "InformationSegmentedViewController.h"
+#import "InformationViewController.h"
 #import "ParticipantDetailViewController.h"
 #import "MessagesViewController.h"
 #import "VideoCollectionViewCell.h"
 #import "ConferenceToolbar.h"
-#import "LogsController.h"
 #import "MessagesController.h"
 #import "ooVooController.h"
 #import <AVFoundation/AVAudioSession.h>
@@ -20,7 +19,6 @@
 @interface ConferenceViewController ()
 
 @property (nonatomic, strong) ParticipantsController *participantsController;
-@property (nonatomic, strong) LogsController *logsController;
 @property (nonatomic, strong) MessagesController *messagesController;
 @property (nonatomic, strong) NSBlockOperation *blockOperation;
 @property (nonatomic, weak)   UIPopoverController *infoPopoverController;
@@ -39,9 +37,8 @@
     [super viewDidLoad];
     
     self.participantsController = [[ParticipantsController alloc] init];
-    self.logsController = [[LogsController alloc] init];
     self.messagesController = [[MessagesController alloc] init];
-    self.logsController.participantsController = self.messagesController.participantsController = self.participantsController;
+    self.messagesController.participantsController = self.participantsController;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(conferenceDidBegin:)
@@ -193,11 +190,10 @@
 {
     if ([segue.identifier isEqualToString:@"NavigateToInfo"])
     {
-        InformationSegmentedViewController *infoViewController;        
+        InformationViewController *infoViewController;
         UINavigationController *navigationController = segue.destinationViewController;
         infoViewController = navigationController.viewControllers[0];
         infoViewController.participantsController = self.participantsController;
-        infoViewController.logsController = self.logsController;
         infoViewController.conferenceId = self.conferenceId;
 
         if ([segue isKindOfClass:[UIStoryboardPopoverSegue class]])

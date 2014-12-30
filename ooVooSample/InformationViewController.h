@@ -15,5 +15,6 @@
 @property (nonatomic, copy) NSString *conferenceId;
 
 - (IBAction)toggleSwitch:(id)sender;
+- (IBAction)done:(id)sender;
 
 @end
