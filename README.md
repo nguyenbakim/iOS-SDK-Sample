@@ -10,7 +10,7 @@ This is released under an Apache 2.0 License, except for the ooVooSDK-iOS.framew
 Please visit [ooVoo SDK site](http://developer.oovoo.com) to register and obtain a development token and AppID.
 
 ## CocoaPods
-We now support integration via [CocoaPods](http://cocoapods.org/). Just add the following to your Podfile: `pod ‘ooVooSDK-iOS’, ~>‘1.4.0’`
+We now support integration via [CocoaPods](http://cocoapods.org/). Just add the following to your Podfile: `pod ‘ooVooSDK-iOS’, ~>‘1.5.0’`
 
 ## Support
 If you need help with the SDK or this app you can find us on [#ooVoo on freenode](http://webchat.freenode.net/?channels=%23oovoo&uio=OT10cnVlde), [@oovoodev on twitter](http://twitter.com/oovoodev) and email <sdk.support@oovoo.com>.

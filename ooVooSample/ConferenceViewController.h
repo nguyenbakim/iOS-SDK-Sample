@@ -11,7 +11,6 @@
 @interface ConferenceViewController : UICollectionViewController <ParticipantsControllerDelegate>
 
 @property (nonatomic, copy) NSString *conferenceId;
-@property (nonatomic, copy) NSString *participantId;
 @property (nonatomic, copy) NSString *participantInfo;
 
 - (IBAction)leaveConference:(id)sender;

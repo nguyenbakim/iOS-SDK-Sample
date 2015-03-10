@@ -14,4 +14,7 @@
 @property (nonatomic, strong) Participant *participant;
 @property (nonatomic, weak) IBOutlet ConferenceToolbar *toolbar;
 
+- (void)zoomOut:(UITapGestureRecognizer *)gestureRecognizer;
+
+
 @end

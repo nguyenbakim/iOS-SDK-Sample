@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="0fs-rM-dlC">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" useAutolayout="YES" initialViewController="0fs-rM-dlC">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
         <!--ooVoo Sample-->
@@ -119,7 +120,6 @@
                         <segue destination="oVy-YB-1OD" kind="popover" identifier="NavigateToInfo" popoverAnchorBarButtonItem="jeT-Dz-gS6" id="oak-9S-Gfp">
                             <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                         </segue>
-                        <segue destination="rDV-1L-rFz" kind="modal" identifier="Messages" id="kGS-2M-UzE"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8A6-7b-cDI" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -155,7 +155,6 @@
                         <segue destination="EJY-SP-9Ch" kind="popover" identifier="Filters" popoverAnchorView="G1f-Ma-57M" id="eeC-t0-NF3">
                             <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                         </segue>
-                        <segue destination="rDV-1L-rFz" kind="modal" identifier="DirectMessages" id="ljo-Sc-m8t"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="swp-s4-H68" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -239,49 +238,6 @@
             </objects>
             <point key="canvasLocation" x="1596" y="2676"/>
         </scene>
-        <!--Messages-->
-        <scene sceneID="Fhf-Wb-SIb">
-            <objects>
-                <viewController storyboardIdentifier="Messages" title="Messages" id="c1T-4Q-po1" customClass="MessagesViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="WEl-lV-HsP"/>
-                        <viewControllerLayoutGuide type="bottom" id="s4y-bJ-cqW"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="3oH-Ej-YUy">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Messages" id="3iN-ck-489">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="aot-lT-Esd">
-                            <connections>
-                                <action selector="done:" destination="c1T-4Q-po1" id="oUq-au-GDy"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="w4t-3c-w8k" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3664" y="-477"/>
-        </scene>
-        <!--MessagesNav-->
-        <scene sceneID="z31-5I-TVh">
-            <objects>
-                <navigationController storyboardIdentifier="MessagesNav" title="MessagesNav" automaticallyAdjustsScrollViewInsets="NO" id="rDV-1L-rFz" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="L1h-ZN-dyP">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="c1T-4Q-po1" kind="relationship" relationship="rootViewController" id="ApL-Sv-sFx"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nVx-eg-HJM" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2714" y="-469"/>
-        </scene>
         <!--Filters-->
         <scene sceneID="nrp-rN-v1o">
             <objects>
@@ -337,7 +293,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="kGS-2M-UzE"/>
-    </inferredMetricsTieBreakers>
 </document>

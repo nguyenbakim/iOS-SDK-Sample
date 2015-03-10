@@ -10,6 +10,12 @@
 #import "ooVooController.h"
 #import "SwitchCell.h"
 
+@interface InformationViewController ()
+
+@property (nonatomic, strong) NSArray *remoteParticipants;
+
+@end
+
 @implementation InformationViewController
 
 #pragma mark - UIViewController
@@ -24,6 +30,8 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStop:) name:OOVOOPreviewDidStopNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(videoDidStart:) name:OOVOOPreviewDidStartNotification object:nil];
+    
+    [self reload];
 }
 
 - (void)dealloc
@@ -39,14 +47,14 @@
 #pragma mark - UITableViewDataSource
 - (NSInteger)tableView:(UITableView *)aTableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.participantsController numberOfParticipants];
+    return [self.remoteParticipants count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)aTableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {    
     SwitchCell *cell = [self.tableView dequeueReusableCellWithIdentifier:@"SwitchCell"];
     
-    Participant *participant = [self.participantsController participantAtIndex:indexPath.row];
+    Participant *participant = [self.remoteParticipants objectAtIndex:indexPath.row];
 	cell.textLabel.text = participant.displayName;
     cell.switcher.on = (participant.state == ooVooVideoOn && participant.switchState == ooVooVideoOn);
     cell.switcher.tag = indexPath.row;
@@ -68,6 +76,17 @@
     return [NSString stringWithFormat:NSLocalizedString(@"Conference ID: %@", nil), self.conferenceId];
 }
 
+- (void)reload
+{
+    NSPredicate *excludeMe = [NSPredicate predicateWithBlock:^BOOL(Participant *participant, NSDictionary *bindings) {
+        return participant.isMe == NO;
+    }];
+    
+    self.remoteParticipants = [[self.participantsController allParticipants] filteredArrayUsingPredicate:excludeMe];
+    
+    [self.tableView reloadData];
+}
+
 #pragma mark - Actions
 - (IBAction)toggleSwitch:(id)sender
 {
@@ -76,12 +95,12 @@
     BOOL enable = aSwitch.isOn;
     NSUInteger index = aSwitch.tag;
     
-    Participant *participant = [self.participantsController participantAtIndex:index];
+    Participant *participant = [self.remoteParticipants objectAtIndex:index];
     participant.switchState = enable? ooVooVideoOn : ooVooVideoOff;
     [[ooVooController sharedController] receiveParticipantVideo:enable forParticipantID:participant.participantID];
     if (!enable) participant.state = ooVooVideoOff;
     
-    [self.tableView reloadData];
+    [self reload];
 }
 
 #pragma mark - Notifications
@@ -89,7 +108,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.tableView reloadData];
+        [self reload];
         
     });
 }
@@ -98,7 +117,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.tableView reloadData];
+        [self reload];
         
     });    
 }
@@ -107,7 +126,7 @@
 {    
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.tableView reloadData];
+        [self reload];
         
     });
 }
@@ -116,7 +135,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.tableView reloadData];
+        [self reload];
         
     });
 }
@@ -125,7 +144,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [self.tableView reloadData];
+        [self reload];
         
     });
 }

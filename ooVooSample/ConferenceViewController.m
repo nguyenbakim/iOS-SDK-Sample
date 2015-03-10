@@ -9,10 +9,8 @@
 #import "ConferenceViewController.h"
 #import "InformationViewController.h"
 #import "ParticipantDetailViewController.h"
-#import "MessagesViewController.h"
 #import "VideoCollectionViewCell.h"
 #import "ConferenceToolbar.h"
-#import "MessagesController.h"
 #import "ooVooController.h"
 #import <AVFoundation/AVAudioSession.h>
 
@@ -22,6 +20,8 @@
 @property (nonatomic, strong) MessagesController *messagesController;
 @property (nonatomic, strong) NSBlockOperation *blockOperation;
 @property (nonatomic, weak)   UIPopoverController *infoPopoverController;
+@property (nonatomic, strong) ParticipantDetailViewController *participantDetailViewController;
+
 
 @end
 
@@ -37,8 +37,6 @@
     [super viewDidLoad];
     
     self.participantsController = [[ParticipantsController alloc] init];
-    self.messagesController = [[MessagesController alloc] init];
-    self.messagesController.participantsController = self.participantsController;
 
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(conferenceDidBegin:)
@@ -60,8 +58,13 @@
                                                  name:OOVOOCameraDidStartNotification
                                                object:nil];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(cameraDidChange:)
+                                                 name:kCameraDidChangeNotification
+                                               object:nil];
+    
     [[ooVooController sharedController] joinConference:self.conferenceId
-                                         participantId:self.participantId
+                                         participantId:kDefaultParticipantId
                                        participantInfo:self.participantInfo];
 }
 
@@ -84,13 +87,6 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
-    if ([ooVooController sharedController].inCallMessagesPermitted)
-    {
-        ConferenceToolbar *conferenceToolbar = (ConferenceToolbar *)self.navigationController.toolbar;
-        conferenceToolbar.messagesBarButtonItem.target = self;
-        conferenceToolbar.messagesBarButtonItem.action = @selector(showMessages:);
-    }
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -105,7 +101,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
-        [ooVooController sharedController].speakerEnabled = YES;
+        [[ooVooController sharedController] setPlaybackMuted:NO];
         
         if ([[AVAudioSession sharedInstance] respondsToSelector:@selector(requestRecordPermission:)]) // iOS 7 and on
         {
@@ -113,7 +109,7 @@
                 if (granted)
                 {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        [ooVooController sharedController].microphoneEnabled = YES;
+                        [[ooVooController sharedController] setRecorderMuted:NO];
                     });
                 }
                 else
@@ -129,7 +125,7 @@
         }
         else
         {
-            [ooVooController sharedController].microphoneEnabled = YES;
+            [[ooVooController sharedController] setRecorderMuted:NO];
         }
     });
 }
@@ -162,6 +158,20 @@
         }];
     });
 }
+
+- (void)cameraDidChange:(NSNotification *)notification
+{
+    Participant *participant = [self.participantsController participantAtIndex:0];
+    CameraState cameraState = (CameraState)[notification.userInfo[kCameraNotificationKey] integerValue];
+    
+    if (cameraState == MUTE_CAMERA) {
+        [self.participantDetailViewController zoomOut:nil];
+        [[ooVooController sharedController] receiveParticipantVideo:NO forParticipantID:participant.participantID];
+    } else {
+        [[ooVooController sharedController] receiveParticipantVideo:YES forParticipantID:participant.participantID];
+    }
+}
+
 
 #pragma mark - Actions
 - (IBAction)leaveConference:(id)sender
@@ -205,15 +215,8 @@
     {
         NSIndexPath *selectedIndexPath = [self.collectionView indexPathsForSelectedItems][0];
         Participant *participant = [self.participantsController participantAtIndex:selectedIndexPath.row];
-        ParticipantDetailViewController *participantDetailViewController = [segue destinationViewController];
-        participantDetailViewController.participant = participant;
-    }
-    else if ([segue.identifier isEqualToString:@"Messages"])
-    {
-        MessagesViewController *messagesViewController;
-        UINavigationController *navigationController = segue.destinationViewController;
-        messagesViewController = navigationController.viewControllers[0];
-        messagesViewController.messagesController = self.messagesController;
+        self.participantDetailViewController = [segue destinationViewController];
+        self.participantDetailViewController.participant = participant;
     }
 }
 

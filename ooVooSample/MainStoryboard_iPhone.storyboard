@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Wm6-DV-2pR">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6254" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Wm6-DV-2pR">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6247"/>
     </dependencies>
     <scenes>
         <!--ooVoo Sample-->
@@ -115,9 +116,6 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
-                    <connections>
-                        <segue destination="QPL-8S-grl" kind="modal" identifier="Messages" id="ErZ-XU-Hom"/>
-                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XyR-RE-HIK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -150,7 +148,6 @@
                     <connections>
                         <outlet property="toolbar" destination="3jK-VK-T7Z" id="XaA-o0-3bb"/>
                         <segue destination="OfN-Fs-OKf" kind="modal" identifier="Filters" id="AZb-tO-oMf"/>
-                        <segue destination="QPL-8S-grl" kind="modal" identifier="DirectMessages" id="pnp-Xy-8jw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="M9r-IZ-TxJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -186,31 +183,6 @@
             </objects>
             <point key="canvasLocation" x="2120" y="435"/>
         </scene>
-        <!--Messages-->
-        <scene sceneID="kKM-Fh-fAt">
-            <objects>
-                <viewController storyboardIdentifier="Messages" title="Messages" id="41D-Lb-DIi" customClass="MessagesViewController" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="DLB-1s-1LZ"/>
-                        <viewControllerLayoutGuide type="bottom" id="Iei-FQ-Y5f"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="ySB-rq-FA1">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="Messages" id="UwK-Ap-eg3">
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="VwN-No-bwN">
-                            <connections>
-                                <action selector="done:" destination="41D-Lb-DIi" id="gVn-cg-HF6"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gqk-Gj-6kX" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="584" y="1267"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="6-ye2-7q-cuc">
             <objects>
@@ -240,24 +212,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pWf-0R-Ij7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-459" y="-360"/>
-        </scene>
-        <!--MessagesNav-->
-        <scene sceneID="gPt-29-hRr">
-            <objects>
-                <navigationController storyboardIdentifier="MessagesNav" title="MessagesNav" automaticallyAdjustsScrollViewInsets="NO" id="QPL-8S-grl" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="RZN-BE-BLI">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="41D-Lb-DIi" kind="relationship" relationship="rootViewController" id="KLQ-c5-Zce"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="trv-Tw-Sav" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="58" y="1267"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="VvV-K9-TuI">
@@ -328,7 +282,4 @@
         <simulatedOrientationMetrics key="orientation"/>
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
-    <inferredMetricsTieBreakers>
-        <segue reference="pnp-Xy-8jw"/>
-    </inferredMetricsTieBreakers>
 </document>

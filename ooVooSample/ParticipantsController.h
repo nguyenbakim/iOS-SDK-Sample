@@ -8,11 +8,11 @@
 
 #import "ooVooController.h"
 
+static NSString* const kDefaultParticipantId = @"";
+
 @class Participant;
 @class MessagesController;
 @protocol ParticipantsControllerDelegate;
-
-
 
 @interface ParticipantsController : NSObject
 
@@ -22,6 +22,7 @@
 
 - (Participant *)participantWithId:(NSString *)participantId;
 - (NSUInteger)indexOfParticipantWithId:(NSString *)participantId;
+- (NSMutableArray*)allParticipants;
 
 @end
 

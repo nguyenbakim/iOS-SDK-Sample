@@ -7,7 +7,6 @@
 //
 
 #import "ParticipantsController.h"
-#import "MessagesController.h"
 #import "ooVooController.h"
 
 @implementation Participant
@@ -64,6 +63,11 @@
 - (void)dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (NSMutableArray*)allParticipants
+{
+    return self.participants;
 }
 
 - (NSInteger)numberOfParticipants
@@ -145,11 +149,6 @@
         participantToAdd.displayName = displayName;
         participantToAdd.state = ooVooVideoUninitialized;
         participantToAdd.switchState = ooVooVideoOn;
-
-        MessagesController *msgController = [[MessagesController alloc] init];
-        msgController.participantID = participantID;
-        msgController.participantsController = self;
-        participantToAdd.messagesController = msgController;
         
         self.participantsByID[participantID] = participantToAdd;
         [self.participants addObject:participantToAdd];

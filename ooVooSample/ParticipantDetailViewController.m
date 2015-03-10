@@ -8,7 +8,6 @@
 
 #import "ParticipantDetailViewController.h"
 #import "ooVooVideoView.h"
-#import "MessagesViewController.h"
 
 @interface ParticipantDetailViewController ()
 
@@ -71,7 +70,7 @@
     
     if (self.participant.isMe)
     {
-        int filtersCount = [[[ooVooController sharedController] availableVideoFilters] count];
+        int filtersCount = (int)[[[ooVooController sharedController] availableVideoFilters] count];
         if (filtersCount > 0)
         {
             self.toolbar.filtersEnabled = YES;
@@ -94,11 +93,6 @@
     {
         self.toolbar.filtersBarButtonItem.target = self;
         self.toolbar.filtersBarButtonItem.action = @selector(showFilters:);
-    }
-    else
-    {
-        self.toolbar.messagesBarButtonItem.target = self;
-        self.toolbar.messagesBarButtonItem.action = @selector(showMessages:);
     }
 }
 
@@ -156,13 +150,6 @@
             UINavigationController *navigationController = segue.destinationViewController;
             navigationController.navigationBar.translucent = NO;
         }
-    }
-    else if ([segue.identifier isEqualToString:@"DirectMessages"])
-    {
-        MessagesViewController *messagesViewController;
-        UINavigationController *navigationController = segue.destinationViewController;
-        messagesViewController = navigationController.viewControllers[0];
-        messagesViewController.messagesController = self.participant.messagesController;
     }
 }
 

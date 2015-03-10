@@ -21,7 +21,6 @@ static NSString *kDefaultConferenceId = @DEFAULT_CONFERENCE_ID;
 
 @property (nonatomic, copy) NSString *conferenceId;
 @property (nonatomic, copy) NSString *participantInfo;
-@property (nonatomic, copy) NSString *participantId;
 @property (nonatomic, assign) UITextField *currentTextField;
 @property (nonatomic, strong) ooVooVideoView *preview;
 @property(nonatomic, strong) UIImageView *avatarImgView;
@@ -32,7 +31,6 @@ static NSString *kDefaultConferenceId = @DEFAULT_CONFERENCE_ID;
 typedef enum
 {
     ConferenceIdRow,
-    ParticipantIdRow,
     DisplayNameRow,
     NUMBER_OF_LOGIN_ROWS
 }
@@ -77,7 +75,6 @@ LoginRow;
     [super viewDidLoad];
     self.conferenceId = kDefaultConferenceId;
     self.participantInfo = [[UIDevice currentDevice] name];
-    self.participantId = [NSString stringWithFormat:@"iOS-%i", arc4random()];
     
     self.preview = [[ooVooVideoView alloc] initWithFrame:self.view.bounds];
     
@@ -137,7 +134,7 @@ LoginRow;
     dispatch_async(dispatch_get_main_queue(), ^{
         
         [self configurePreview];
-        [self.preview associateToID:@""];
+        [self.preview associateToID:kDefaultParticipantId];
         [self.avatarImgView setHidden:YES];
     });
 }
@@ -164,11 +161,6 @@ LoginRow;
         case ConferenceIdRow:
             cell.textLabel.text = @"Conference ID";
             cell.textField.text = self.conferenceId;
-            break;
-
-        case ParticipantIdRow:
-            cell.textLabel.text = @"Participant ID";
-            cell.textField.text = self.participantId;
             break;
             
         case DisplayNameRow:
@@ -201,10 +193,6 @@ LoginRow;
         case ConferenceIdRow:
             self.conferenceId = textField.text;
             break;
-            
-        case ParticipantIdRow:
-            self.participantId = textField.text;
-            break;
         
         case DisplayNameRow:
             self.participantInfo = textField.text;
@@ -233,7 +221,6 @@ LoginRow;
         UINavigationController *conferenceNav = segue.destinationViewController;
         ConferenceViewController *conferenceVC = conferenceNav.viewControllers[0];
         conferenceVC.conferenceId = self.conferenceId;
-        conferenceVC.participantId = self.participantId;
         conferenceVC.participantInfo = self.participantInfo;
     }
 }

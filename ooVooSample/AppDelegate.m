@@ -98,7 +98,7 @@ static NSString *kDefaultBackEndURL = @DEFAULT_BACK_END_URL;
     NSDictionary *defaultParameters = @{ APP_ID_SETTINGS_KEY      : kDefaultAppId,
                                          APP_TOKEN_SETTINGS_KEY   : kDefaultAppToken,
                                          BACKEND_URL_SETTINGS_KEY : kDefaultBackEndURL,
-                                         LOG_LEVEL_SETTINGS_KEY   : [NSNumber numberWithInt:ooVooDebug]};
+                                         LOG_LEVEL_SETTINGS_KEY   : [NSNumber numberWithInt:ooVooTrace]};
     
     [[NSUserDefaults standardUserDefaults] registerDefaults:defaultParameters];
     [[NSUserDefaults standardUserDefaults] synchronize];
