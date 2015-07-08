@@ -12,7 +12,7 @@ Please visit [ooVoo SDK site](http://developer.oovoo.com) to register and obtain
 ## CocoaPods
 We now support integration via [CocoaPods](http://cocoapods.org/). Just add the following to your Podfile: 
 
-    pod 'ooVooSDK-iOS', '~> 1.5.0'
+    pod 'ooVooSDK-iOS', '~> 1.5.0.73'
 
 ## Support
 If you need help with the SDK or this app you can find us on [#ooVoo on freenode](http://webchat.freenode.net/?channels=%23oovoo&uio=OT10cnVlde), [@oovoodev on twitter](http://twitter.com/oovoodev) and email <sdk.support@oovoo.com>.
