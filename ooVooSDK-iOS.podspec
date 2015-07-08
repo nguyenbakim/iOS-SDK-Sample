@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|                            										
   s.name         = "ooVooSDK-iOS"                                                                                                
-  s.version      = "1.5.0"                                                                                 
+  s.version      = "1.5.0.73"                                                                                 
   s.summary      = "ooVooSDK provides a video chat library for iOS"                                                            
   s.homepage     = "https://developer.oovoo.com"                                                                             
   s.license      = { :type => "Commercial", :text => ""}                                                                     
