@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <ooVooSDK/ooVooSdk.h>
 
 @class NSFileHandle;
 
@@ -14,6 +15,6 @@
 
 +(FileLogger *) sharedInstance;
 
--(void) OnLog:(NSNotification *)notification;
-
+-(void) log:(LogLevel) level message:(NSString *)log;
+- (NSString *) readLastMessages: (NSUInteger)readSize;
 @end

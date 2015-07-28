@@ -8,13 +8,37 @@
 
 #import "FileLogger.h"
 #import <Foundation/NSFileHandle.h>
-#import "ooVooController.h"
+
+@interface LogFileInfo : NSObject
+{
+    __strong NSString *filePath;
+    
+    __strong NSDictionary *fileAttributes;
+    
+    __strong NSDate *creationDate;
+    __strong NSDate *modificationDate;
+    
+    unsigned long long fileSize;
+}
+
+@property (strong, nonatomic, readonly) NSString *filePath;
+
+@property (strong, nonatomic, readonly) NSDictionary *fileAttributes;
+
+@property (strong, nonatomic, readonly) NSDate *creationDate;
+@property (strong, nonatomic, readonly) NSDate *modificationDate;
+
+@property (nonatomic, readonly) unsigned long long fileSize;
+
+- (instancetype)initWithFilePath:(NSString *)filePath;
+- (NSComparisonResult)reverseCompareByCreationDate:(LogFileInfo *)another;
+- (NSComparisonResult)reverseCompareByModificationDate:(LogFileInfo *)another;
+@end
 
 @interface FileLogger()
 {
-//@property (nonatomic) NSFileHandle *mLogFile;
-    
     NSFileHandle *mLogFile;
+    NSString     *mLogFilePath;
 }
 
 - (id) init;
@@ -39,10 +63,8 @@
 -(id) init
 {
     if (self = [super init]) {
-        
+        NSLog(@"FileLogger init");
         mLogFile = nil;
-
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(OnLog:) name:OOVOOLogNotification object:nil];
     }
     
     return self;
@@ -60,60 +82,72 @@
 
 -(void) dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:OOVOOLogNotification object:nil];
+    NSLog(@"FileLogger dealloc");
+    [mLogFile closeFile];
 }
 
--(void) createLogFile
+- (NSString*) logsDirectory
 {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString* result = nil;
     
     if (paths != nil && [paths count] > 0) {
         NSString *documentsDirectory = [paths firstObject];
         
         if (documentsDirectory != nil) {
             
-            NSString *logFilesFolder = [documentsDirectory stringByAppendingString:@"/Logs"];
-            
-            NSFileManager* fileManager = [NSFileManager defaultManager];
-            
-            BOOL isFolderExists = [fileManager fileExistsAtPath:logFilesFolder];
-            
-            if (!isFolderExists){
-                NSError *createDirError = nil;
-                BOOL isDirCreatedSuccess = [fileManager createDirectoryAtPath:logFilesFolder withIntermediateDirectories:NO attributes:nil error:&createDirError];
-                if (!isDirCreatedSuccess){
-                    NSLog(@"Failed to create directory %@ with the error: %@", logFilesFolder, [createDirError localizedDescription]);
-                    return;
-                }
-            }
-            
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
-            [dateFormat setDateFormat:@"dd-MM-yyyy"];
-            
-            NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
-            [timeFormat setDateFormat:@"HH.mm.ss.SSS"];
-            
-            NSDate *now = [NSDate date];
-            
-            NSString *theDate = [dateFormat stringFromDate:now];
-            NSString *theTime = [timeFormat stringFromDate:now];
-            
-            NSString *filePath = [logFilesFolder stringByAppendingString:[NSString stringWithFormat:@"/ooVooSampleLogFile_%@_%@.txt", theDate, theTime]];
+            result = [documentsDirectory stringByAppendingString:@"/Logs"];
+        }
+    }
+    
+    return result;
+}
 
-            BOOL isFileExists = [fileManager fileExistsAtPath:filePath];
-            
-            if (!isFileExists) {
-                BOOL isFileCreated = [fileManager createFileAtPath:filePath contents:nil attributes:nil];
-                
-                if (isFileCreated) {
-                    mLogFile = [NSFileHandle fileHandleForWritingAtPath:filePath];
-                }
-                else{
-                    NSLog(@"Failed to create file: %@ %s", filePath, strerror(errno));
-                }
+-(void) createLogFile
+{
+    NSString *logFilesFolder = [self logsDirectory];
+    
+    if (logFilesFolder)
+    {
+        NSFileManager* fileManager = [NSFileManager defaultManager];
+        
+        BOOL isFolderExists = [fileManager fileExistsAtPath:logFilesFolder];
+        
+        if (!isFolderExists){
+            NSError *createDirError = nil;
+            BOOL isDirCreatedSuccess = [fileManager createDirectoryAtPath:logFilesFolder withIntermediateDirectories:NO attributes:nil error:&createDirError];
+            if (!isDirCreatedSuccess){
+                NSLog(@"Failed to create directory %@ with the error: %@", logFilesFolder, [createDirError localizedDescription]);
+                return;
             }
         }
         
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        [dateFormat setDateFormat:@"yyyy-MM-dd"];
+        
+        NSDateFormatter *timeFormat = [[NSDateFormatter alloc] init];
+        [timeFormat setDateFormat:@"HH.mm.ss.SSS"];
+        
+        NSDate *now = [NSDate date];
+        
+        NSString *theDate = [dateFormat stringFromDate:now];
+        NSString *theTime = [timeFormat stringFromDate:now];
+        
+        NSString *filePath = [logFilesFolder stringByAppendingString:[NSString stringWithFormat:@"/ooVooSampleLogFile_%@_%@.txt", theDate, theTime]];
+
+        BOOL isFileExists = [fileManager fileExistsAtPath:filePath];
+        
+        if (!isFileExists) {
+            BOOL isFileCreated = [fileManager createFileAtPath:filePath contents:nil attributes:nil];
+            
+            if (isFileCreated) {
+                mLogFile = [NSFileHandle fileHandleForWritingAtPath:filePath];
+                mLogFilePath = filePath;
+            }
+            else{
+                NSLog(@"Failed to create file: %@ %s", filePath, strerror(errno));
+            }
+        }
     }
 }
 
@@ -164,22 +198,12 @@
     if (mLogFile == nil) {
         return;
     }
-    
-    static NSDateFormatter *sDateTimeFormatter = nil;
 
-    if (sDateTimeFormatter == nil){
-        sDateTimeFormatter = [[NSDateFormatter alloc] init];
-        [sDateTimeFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
-    }
-    
-    NSString *currentDateTime = [sDateTimeFormatter stringFromDate:[NSDate date]];
-    
-    NSString *logMsgLine = [NSString stringWithFormat:@"%@ %@\n", currentDateTime, message];
-    
-    [mLogFile writeData:[logMsgLine dataUsingEncoding:NSUTF8StringEncoding]];
+    message = [message stringByAppendingString:@"\n"];
+    [mLogFile writeData:[message dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
-- (void) PrintLog:(ooVooLoggerLevel)level WithContent:(NSString *)message
+- (void) PrintLog:(LogLevel)level WithContent:(NSString *)message
 {
     if (mLogFile == nil)
     {
@@ -188,39 +212,245 @@
     
     switch (level)
     {
-        case ooVooFatal:
+        case LogLevelFatal:
             [self logFatal:message];
             break;
             
-        case ooVooError:
+        case LogLevelError:
             [self logError:message];
             break;
             
-        case ooVooWarning:
+        case LogLevelWarning:
             [self logWarning:message];
             break;
             
-        case ooVooInfo:
+        case LogLevelInfo:
             [self logInfo:message];
             break;
             
-        case ooVooTrace:
+        case LogLevelTrace:
             [self logTrace:message];
             break;
             
-        case ooVooDebug:
+        case LogLevelDebug:
         default:
             [self logDebug:message];
             break;
     }
 }
 
--(void) OnLog:(NSNotification *)notification
+-(void) log:(LogLevel) level message:(NSString *)message
 {
-    NSString *message = [notification.userInfo objectForKey:OOVOOLogKey];
-    NSNumber *level = [notification.userInfo objectForKey:OOVOOLogLevelKey];
-    
-    [self PrintLog:[level integerValue] WithContent:message];
+    [self PrintLog:level WithContent:message];
 }
 
+-(NSString*) alignToLine:(NSString*)msgIn size:(NSUInteger)size
+{
+    if (msgIn == nil)
+        return @"";
+    
+    NSRange searchRange;
+    searchRange.length   = MIN(size, msgIn.length);
+    searchRange.location = msgIn.length - searchRange.length;
+    
+    NSRange copyRange    = [msgIn rangeOfString:@"\n" options:0 range:searchRange];
+    if (copyRange.length == NSNotFound)
+        return @"";
+    
+    copyRange.location += copyRange.length;
+    copyRange.length    = msgIn.length - copyRange.location;
+    if (copyRange.location + copyRange.length > msgIn.length)
+        return @"";
+    
+    return [msgIn substringWithRange:copyRange];
+}
+
+- (NSString *) readLastMessages: (NSUInteger)readSize
+{
+//    NSArray* log_paths = [[self unsortedLogFilePaths] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2)
+//    {
+//        NSComparisonResult result = [(NSString*)obj1 compare:(NSString *)obj2];
+//        
+//        if (result == NSOrderedAscending)
+//            return NSOrderedDescending;
+//        
+//        if (result == NSOrderedDescending)
+//            return NSOrderedAscending;
+//        
+//        return NSOrderedSame;
+//    }];
+    
+    NSArray* log_paths = [self sortedLogFilePaths];
+    
+    NSString* content = @"";
+    
+    if (log_paths.count)
+    {
+        NSString* currentLogPath = log_paths[0];
+        
+        NSString* currentMsgs = [NSString stringWithContentsOfFile:currentLogPath
+                                                          encoding:NSUTF8StringEncoding
+                                                             error:NULL];
+
+        if ([currentMsgs length] >= readSize)
+            return [self alignToLine:currentMsgs size:readSize];
+
+        NSString*  previousMsgs = @"";
+        
+        NSString* previousLogPath = (log_paths.count>1 ? log_paths[1] : nil);
+        if (previousLogPath)
+        {
+            NSString*  previousMsgs = [NSString stringWithContentsOfFile:previousLogPath
+                                                                encoding:NSUTF8StringEncoding
+                                                                   error:NULL];
+            if (![previousMsgs length])
+                return currentMsgs;
+        }
+
+        previousMsgs = [self alignToLine:previousMsgs size:(readSize - currentMsgs.length)];
+        if (![previousMsgs length])
+            return currentMsgs;
+
+        NSString*  alignedMsgs = [previousMsgs stringByAppendingString:currentMsgs];
+        
+        return alignedMsgs;
+    }
+    
+    return content;
+}
+
+/**
+ * Returns an array of NSString objects,
+ * each of which is the filePath to an existing log file on disk.
+ **/
+- (NSArray *)unsortedLogFilePaths
+{
+    NSString *logsDirectory = [self logsDirectory];
+    NSArray *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:logsDirectory error:nil];
+    
+    NSMutableArray *unsortedLogFilePaths = [NSMutableArray arrayWithCapacity:[fileNames count]];
+    
+    for (NSString *fileName in fileNames)
+    {
+        NSString *filePath = [logsDirectory stringByAppendingPathComponent:fileName];
+        
+        [unsortedLogFilePaths addObject:filePath];
+    }
+    
+    return unsortedLogFilePaths;
+}
+
+- (NSArray *)unsortedLogFileInfos
+{
+    NSArray *unsortedLogFilePaths = [self unsortedLogFilePaths];
+    
+    NSMutableArray *unsortedLogFileInfos = [NSMutableArray arrayWithCapacity:[unsortedLogFilePaths count]];
+    
+    for (NSString *filePath in unsortedLogFilePaths)
+    {
+        LogFileInfo *logFileInfo = [[LogFileInfo alloc] initWithFilePath:filePath];
+        
+        [unsortedLogFileInfos addObject:logFileInfo];
+    }
+    
+    return unsortedLogFileInfos;
+}
+
+- (NSArray *)sortedLogFilePaths
+{
+    NSArray *sortedLogFileInfos = [[self unsortedLogFileInfos] sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        LogFileInfo* fi1 = (LogFileInfo*)obj1;
+        LogFileInfo* fi2 = (LogFileInfo*)obj2;
+        
+        return [fi1 reverseCompareByCreationDate:fi2];
+    }];
+    
+    NSMutableArray *sortedLogFilePaths = [NSMutableArray arrayWithCapacity:[sortedLogFileInfos count]];
+    
+    for (LogFileInfo *logFileInfo in sortedLogFileInfos)
+    {
+        [sortedLogFilePaths addObject:[logFileInfo filePath]];
+    }
+    
+    return sortedLogFilePaths;
+}
+
+@end
+
+@implementation LogFileInfo
+
+@synthesize filePath;
+
+@dynamic fileAttributes;
+@dynamic creationDate;
+@dynamic modificationDate;
+
+- (instancetype)initWithFilePath:(NSString *)aFilePath
+{
+    if ((self = [super init]))
+    {
+        filePath = [aFilePath copy];
+    }
+    return self;
+}
+
+- (NSDictionary *)fileAttributes
+{
+    if (fileAttributes == nil)
+    {
+        fileAttributes = [[NSFileManager defaultManager] attributesOfItemAtPath:filePath error:nil];
+    }
+    return fileAttributes;
+}
+
+- (NSDate *)modificationDate
+{
+    if (modificationDate == nil)
+    {
+        modificationDate = [[self fileAttributes] objectForKey:NSFileModificationDate];
+    }
+    
+    return modificationDate;
+}
+
+- (NSDate *)creationDate
+{
+    if (creationDate == nil)
+    {
+        creationDate = [[self fileAttributes] objectForKey:NSFileCreationDate];
+    }
+    return creationDate;
+}
+
+- (NSComparisonResult)reverseCompareByCreationDate:(LogFileInfo *)another
+{
+    NSDate *us = [self creationDate];
+    NSDate *them = [another creationDate];
+    
+    NSComparisonResult result = [us compare:them];
+    
+    if (result == NSOrderedAscending)
+        return NSOrderedDescending;
+    
+    if (result == NSOrderedDescending)
+        return NSOrderedAscending;
+    
+    return NSOrderedSame;
+}
+
+- (NSComparisonResult)reverseCompareByModificationDate:(LogFileInfo *)another
+{
+    NSDate *us = [self modificationDate];
+    NSDate *them = [another modificationDate];
+    
+    NSComparisonResult result = [us compare:them];
+    
+    if (result == NSOrderedAscending)
+        return NSOrderedDescending;
+    
+    if (result == NSOrderedDescending)
+        return NSOrderedAscending;
+    
+    return NSOrderedSame;
+}
 @end

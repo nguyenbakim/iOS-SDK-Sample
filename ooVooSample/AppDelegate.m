@@ -1,122 +1,104 @@
 //
-// AppDelegate.m
-// 
-// Created by ooVoo on July 22, 2013
+//  AppDelegate.m
+//  ooVooSdkSampleShow
 //
-// © 2013 ooVoo, LLC.  Used under license. 
+//  Created by Alexander Balasanov on 2/25/15.
+//  Copyright (c) 2015 ooVoo LLC. All rights reserved.
 //
 
+#import <ooVooSDK/ooVooSDK.h>
 #import "AppDelegate.h"
-#import "ooVooController.h"
-#import "MainViewController.h"
-#import "LoginParameters.h"
 #import "FileLogger.h"
 
+#import "UserDefaults.h"
+#import "SettingBundle.h"
+#define User_isInVideoView @"User_isInVideoView"
 
-#define APP_ID_SETTINGS_KEY       @"APP_ID_SETTINGS_KEY"
+ 
+
 #define APP_TOKEN_SETTINGS_KEY    @"APP_TOKEN_SETTINGS_KEY"
-#define BACKEND_URL_SETTINGS_KEY  @"BACKEND_URL_SETTINGS_KEY"
 #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
 
-static NSString *kDefaultAppId      = @DEFAULT_APP_ID;
-static NSString *kDefaultAppToken   = @DEFAULT_APP_TOKEN;
-static NSString *kDefaultBackEndURL = @DEFAULT_BACK_END_URL;
-
 @interface AppDelegate ()
-{
-    BOOL cameraWasStoppedByResignActive;
-    BOOL transmitWasStoppedByResignActive;
-}
 
 @end
 
 @implementation AppDelegate
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+ 
+ 
+ 
+    [UserDefaults setBool:NO ToKey:User_isInVideoView];
     
     [self setupConnectionParameters];
 
-    [FileLogger sharedInstance];
-    
-    [ooVooController setLogLevel: [[NSUserDefaults standardUserDefaults] integerForKey:LOG_LEVEL_SETTINGS_KEY]];
-    ooVooInitResult result = [[ooVooController sharedController] initSdk:[[NSUserDefaults standardUserDefaults] stringForKey:APP_ID_SETTINGS_KEY]
-                                                        applicationToken:[[NSUserDefaults standardUserDefaults] stringForKey:APP_TOKEN_SETTINGS_KEY]
-                                                                 baseUrl:[[NSUserDefaults standardUserDefaults] stringForKey:BACKEND_URL_SETTINGS_KEY]];
-    if (result != ooVooInitResultOk)
-    {
-        NSLog(@"ooVoo SDK initialization failed with result %d", result);
-
-        NSString *reason;
-        if (result == ooVooInitResultAppIdNotValid) {
-            reason = @"AppID invalid, might be empty.\n\nGet your App ID and App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @DEFAULT_APP_ID and @DEFAULT_APP_TOKEN constants in code.";
-        } else if(result == ooVooInitResultInvalidToken) {
-            reason = @"Token invalid, might be empty.\n\nGet your App ID and App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @DEFAULT_APP_ID and @DEFAULT_APP_TOKEN constants in code.";
-        } else {
-            reason = [[ooVooController sharedController] errorMessageForOoVooInitResult:result];
-        }
-
-        double delayInSeconds = 0.75;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-            
-        [[[UIAlertView alloc] initWithTitle:@"Init ooVoo Sdk"
-                                message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), reason]
-                                delegate:nil
-                                cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                                otherButtonTitles:nil] show];
-        });
-    } else {
-        self.isSdkInited = YES;
-    }
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application;
-{
-    if ([ooVooController sharedController].transmitEnabled)
-    {
-        [ooVooController sharedController].transmitEnabled = NO;
-        transmitWasStoppedByResignActive = YES;
-    }
+- (void)applicationWillResignActive:(UIApplication *)application {
+    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
-{
-    if (transmitWasStoppedByResignActive && [ooVooController sharedController].cameraEnabled)
-    {
-        // sends "Turned on camera" to other participants so they can resume displaying our video
-        [ooVooController sharedController].transmitEnabled = YES;
-        transmitWasStoppedByResignActive = NO;
-    }
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
+    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    
+    ooVooClient *sdk = [ooVooClient sharedInstance];
+    [sdk.AVChat.VideoController stopTransmitVideo];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    //    if ([UserDefaults getBoolForToKey:User_isInVideoView]) {
+    //        <#statements#>
+    //    }
+    ooVooClient *sdk = [ooVooClient sharedInstance];
+    [sdk.AVChat.VideoController startTransmitVideo];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application {
+    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
 
 #pragma mark - Configuration
 - (void)setupConnectionParameters
 {
-    NSDictionary *defaultParameters = @{ APP_ID_SETTINGS_KEY      : kDefaultAppId,
-                                         APP_TOKEN_SETTINGS_KEY   : kDefaultAppToken,
-                                         BACKEND_URL_SETTINGS_KEY : kDefaultBackEndURL,
-                                         LOG_LEVEL_SETTINGS_KEY   : [NSNumber numberWithInt:ooVooTrace]};
+    NSDictionary *curParameters =
+  @{
+    APP_TOKEN_SETTINGS_KEY   : [[SettingBundle sharedSetting] getSettingForKey:@"settingBundle_AppToken"],
+    LOG_LEVEL_SETTINGS_KEY   : [[SettingBundle sharedSetting] getSettingForKey:@"settingBundle_SDK_LogLevel"]
+    };
     
-    [[NSUserDefaults standardUserDefaults] registerDefaults:defaultParameters];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:curParameters];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
-    NSString *defaultAppId = [[NSUserDefaults standardUserDefaults] stringForKey:APP_ID_SETTINGS_KEY];
-    NSString *defaultAppToken = [[NSUserDefaults standardUserDefaults] stringForKey:APP_TOKEN_SETTINGS_KEY];
-    NSString *defaultBackendURL = [[NSUserDefaults standardUserDefaults] stringForKey:BACKEND_URL_SETTINGS_KEY];
-    int defaultLogLevel = [[NSUserDefaults standardUserDefaults]  integerForKey:LOG_LEVEL_SETTINGS_KEY];
+    NSString *curAppToken = [[NSUserDefaults standardUserDefaults] stringForKey:APP_TOKEN_SETTINGS_KEY];
+    int curLogLevel = [[NSUserDefaults standardUserDefaults]  integerForKey:LOG_LEVEL_SETTINGS_KEY];
     
-    NSString *appId = [defaultAppId length]? defaultAppId : defaultParameters[APP_ID_SETTINGS_KEY];
-    NSString *appToken = [defaultAppToken length] ? defaultAppToken : defaultParameters[APP_TOKEN_SETTINGS_KEY];
-    NSString *backendURL = [defaultBackendURL length] ? defaultBackendURL : defaultParameters[BACKEND_URL_SETTINGS_KEY];
-    NSNumber *logLevel = [NSNumber numberWithInt:defaultLogLevel];
+    NSString *appToken = curAppToken;
+    NSNumber *logLevel = [NSNumber numberWithInt:curLogLevel];
     
-    [[NSUserDefaults standardUserDefaults] setValue:appId forKey:APP_ID_SETTINGS_KEY];
+    [[SettingBundle sharedSetting] setSettingKey:@"settingBundle_AppToken" WithValue:appToken];
+    [[SettingBundle sharedSetting] setSettingKey:@"settingBundle_SDK_LogLevel" WithValue:logLevel];
+    
     [[NSUserDefaults standardUserDefaults] setValue:appToken forKey:APP_TOKEN_SETTINGS_KEY];
-    [[NSUserDefaults standardUserDefaults] setValue:backendURL forKey:BACKEND_URL_SETTINGS_KEY];
     [[NSUserDefaults standardUserDefaults] setValue:logLevel forKey:LOG_LEVEL_SETTINGS_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
+
 }
+
+ 
+
+ 
+ 
+ 
+ 
+
 @end

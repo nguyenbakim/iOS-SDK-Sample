@@ -1,16 +1,16 @@
 //
-// AppDelegate.h
-// 
-// Created by ooVoo on July 22, 2013
+//  AppDelegate.h
+//  ooVooSdkSampleShow
 //
-// © 2013 ooVoo, LLC.  Used under license. 
+//  Created by Alexander Balasanov on 2/25/15.
+//  Copyright (c) 2015 ooVoo LLC. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+ 
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@interface AppDelegate : UIResponder <UIApplicationDelegate >
 
 @property (strong, nonatomic) UIWindow *window;
-@property (assign, nonatomic) BOOL isSdkInited;
 
 @end

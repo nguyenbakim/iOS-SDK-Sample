@@ -1,17 +1,15 @@
 //
-// main.m
-// 
-// Created by ooVoo on July 22, 2013
+//  main.m
+//  ooVooSdkSampleShow
 //
-// © 2013 ooVoo, LLC.  Used under license. 
+//  Created by Alexander Balasanov on 2/25/15.
+//  Copyright (c) 2015 ooVoo LLC. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-
 #import "AppDelegate.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char * argv[]) {
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));
     }
