@@ -1,4 +1,4 @@
-## iOS-SDK-Sample for SDK v2
+## iOS-SDK-Sample for SDK v2.1
 
 =================
 >Please note changes to the architecture in this version of the sample app versus earlier versions.
