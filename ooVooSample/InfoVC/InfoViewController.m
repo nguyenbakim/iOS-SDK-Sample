@@ -55,7 +55,7 @@
     
     
     ParticipentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    cell.lblParticipentID.text= uid;
+    cell.lblParticipentID.text = self.participants[uid];
     
    [cell.switchShowOrHide setOn:[[_delegate InfoViewController_GetVisualListForId:uid] boolValue]];
     

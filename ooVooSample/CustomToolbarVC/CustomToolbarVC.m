@@ -120,6 +120,9 @@
             [btn setSelected:false];
         }
     }
+    
+    UIButton *btnCamera=[self.view viewWithTag:toolbar_camera];
+    [btnCamera setImage:[UIImage imageNamed:@"camera"] forState:UIControlStateNormal];
 }
 
 -(void)setCameraImageForButtonIsOn:(BOOL)isOn{
@@ -127,6 +130,7 @@
     UIButton *btnCamera=[self.view viewWithTag:toolbar_camera];
     NSString *imageName= isOn?@"camera":@"camera disabled";
     [btnCamera setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+    btnCamera.imageView.image=[UIImage imageNamed:imageName];
 }
 
 @end

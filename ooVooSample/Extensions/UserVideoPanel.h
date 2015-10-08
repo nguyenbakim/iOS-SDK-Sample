@@ -11,7 +11,7 @@
 @protocol UserVideoPanelDELEGATE;
 
 
-@interface UserVideoPanel : VideoPanel {
+@interface UserVideoPanel : ooVooVideoPanel {
     UILabel *lblUserName;
     UIImageView *imgView;
      UILabel *lblVideoAlert;

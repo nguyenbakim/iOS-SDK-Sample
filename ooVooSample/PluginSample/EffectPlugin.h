@@ -1,20 +1,19 @@
 #ifdef _WINRT_DLL
-	#include "ooVooApi/api/cpp/plugins.h"
+#include "ooVooApi/api/cpp/plugins.h"
 #else
 #ifdef ANDROID
-	#include "pluginapi/plugins.h"
+#include "pluginapi/plugins.h"
 #else
-	#include "ooVooSDK/plugins.h"
+#include "ooVooSDK/plugins.h"
 #endif
 #endif
 
-namespace EffectSample
-{
+namespace EffectSample {
 class EffectPlugin : public oovoo::sdk::video_effect
 {
 	OOVOO_CLASS(EffectPlugin, oovoo::sdk::video_effect, "{bc06d2ef-c2d1-4190-9f41-c58b5603535d}");
 	bool        _is_default;
-    
+
 public:
 	EffectPlugin(oovoo::sdk::plugin_info::ptr info);
 	virtual ~EffectPlugin();
@@ -67,9 +66,10 @@ public:
 	{
 		return _is_default;
 	}
+	virtual const char* category() const override;
 
 
-	virtual void destroyResources(){ /*TODO: implement function*/ }
+	virtual void destroyResources() { /*TODO: implement function*/ }
 private:
 	std::string        _instance_id;
 	oovoo::sdk::plugin_info::ptr   _info;

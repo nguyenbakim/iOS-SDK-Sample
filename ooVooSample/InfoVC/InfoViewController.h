@@ -23,6 +23,7 @@
 @property (retain, nonatomic) ooVooClient *sdk;
 @property(nonatomic,weak)id<InfoViewController_DELEGATE>delegate;
 
+@property (nonatomic, strong) NSDictionary *participants;
 @property (retain, nonatomic) NSArray *arrParticipants;
 @property (nonatomic, strong) NSString *strConferenceId;
 @property (weak, nonatomic) IBOutlet UILabel *lblConferenceID;

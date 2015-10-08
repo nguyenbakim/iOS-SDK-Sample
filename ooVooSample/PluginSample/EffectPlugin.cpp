@@ -48,4 +48,10 @@ oovoo::sdk::video_frame::ptr EffectPlugin::process(oovoo::sdk::video_frame::ptr 
     
     return frame;
 }
+
+const char* EffectPlugin::category() const
+{
+	return _info->category();
+}
+
 }

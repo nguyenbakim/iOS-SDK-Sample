@@ -7,10 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ViewController.h"
  
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate >
+{
+    UINavigationController *navigationController ;
+    UIStoryboard *mainStoryboard ;
+    ViewController *viewVideoControler ;
+
+}
 
 @property (strong, nonatomic) UIWindow *window;
+
 
 @end

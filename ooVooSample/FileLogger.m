@@ -185,6 +185,12 @@
     NSLog(@"%@", logMsg);
     [self writeLogToFile:logMsg];
 }
+- (void) logSample: (NSString*)message
+{
+    NSString *logMsg = [NSString stringWithFormat:@"[INFO Sample  ] %@", message];
+    NSLog(@"%@", logMsg);
+    [self writeLogToFile:logMsg];
+}
 
 - (void) logDebug: (NSString*)message
 {
@@ -232,6 +238,10 @@
             [self logTrace:message];
             break;
             
+        case LogLevelSample:
+            [self logSample:message];
+            break;
+            
         case LogLevelDebug:
         default:
             [self logDebug:message];
@@ -246,7 +256,7 @@
 
 -(NSString*) alignToLine:(NSString*)msgIn size:(NSUInteger)size
 {
-    if (msgIn == nil)
+    if (msgIn == nil || [msgIn isEqualToString:@""])
         return @"";
     
     NSRange searchRange;

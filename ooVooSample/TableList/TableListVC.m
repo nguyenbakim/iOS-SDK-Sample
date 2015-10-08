@@ -61,30 +61,10 @@
 
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    
-//    for (int i=0; i<[_arrList count]; i++) {
-//        NSIndexPath *index = [NSIndexPath indexPathForItem:i inSection:0];
-//        
-//        [tableView deselectRowAtIndexPath:index animated:YES];
-//
-//    }
     _selectedIndex=indexPath.row;
     [tableView reloadData];
-  
-    
-//    UITableViewCell *theCell = [tableView cellForRowAtIndexPath:indexPath];
-//    
-//    if (theCell.accessoryType == UITableViewCellAccessoryNone) {
-//        theCell.accessoryType = UITableViewCellAccessoryCheckmark;
-//    }
-//    
-//    else if (theCell.accessoryType == UITableViewCellAccessoryCheckmark) {
-//        theCell.accessoryType = UITableViewCellAccessoryNone;
-//    }
-    
     [_delegate tableListDidSelect:indexPath.row];
-    
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 

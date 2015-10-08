@@ -15,6 +15,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *viewAuthorization_Container;
 @property (weak, nonatomic) IBOutlet UITextField *txt_userId;
+@property (weak, nonatomic) IBOutlet UITextField *txtDisplayName;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 
 - (IBAction)act_LogIn:(id)sender;

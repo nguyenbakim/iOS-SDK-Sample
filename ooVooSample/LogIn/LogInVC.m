@@ -16,9 +16,13 @@
 #define User_isInVideoView @"User_isInVideoView"
 
 #define Segue_Authorization @"ToAuthorizationView"
-#define Segue_PushTo_ConferenceVC @"ConferenceVC"
+
 
 #define UserDefault_UserId @"UserID"
+#define UserDefault_DisplayName @"displayName"
+
+
+#define Segue_VideoConference @"Segue_VideoConferenceVC"
 
 
 @interface LogInVC () {
@@ -51,10 +55,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     
     _txt_userId.text = [self randomUser];
+    _txtDisplayName.text=[self returnSavedDisplayname];
     
     UIButton *btnLoging = [self.view viewWithTag:100];
     btnLoging.enabled = true;
     self.navigationItem.title = @"Login";
+   
 }
 - (void)viewDidDisappear:(BOOL)animated {
     self.txt_userId.text = @"";
@@ -64,12 +70,12 @@
 #pragma mark - Navigation
 
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender {
-    if ([identifier isEqualToString:Segue_Authorization]) {
-        if ([UserDefaults getBoolForToKey:User_isInVideoView]) {
-            [self performSegueWithIdentifier:Segue_PushTo_ConferenceVC sender:nil];
-            return NO;
-        }
-    }
+//    if ([identifier isEqualToString:Segue_Authorization]) {
+//        if ([UserDefaults getBoolForToKey:User_isInVideoView]) {
+//            [self performSegueWithIdentifier:Segue_PushTo_ConferenceVC sender:nil];
+//            return NO;
+//        }
+//    }
     return YES;
 }
 
@@ -104,15 +110,18 @@
     if ([self isUserIdEmpty])
         return;
     [UserDefaults setObject:_txt_userId.text ForKey:UserDefault_UserId];
+    [UserDefaults setObject:_txtDisplayName.text ForKey:UserDefault_DisplayName];
     
     [sender setEnabled:false];
     [spinner startAnimating];
+    
+   
     
     [self.sdk.Account login:self.txt_userId.text
                  completion:^(SdkResult *result) {
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
                      [spinner stopAnimating];
-                     if (result.Result){
+                     if (result.Result != sdk_error_OK){
                          [[[UIAlertView alloc] initWithTitle:@"Login Error" message:result.description delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil, nil] show];
                           [self.loginButton setEnabled:true];
                      }
@@ -150,33 +159,26 @@
 - (void)onLogin:(BOOL)error {
     if (!error) {
         [ActiveUserManager activeUser].userId = self.txt_userId.text;
-        [self performSegueWithIdentifier:Segue_PushTo_ConferenceVC sender:nil];
+        [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
+        [self performSegueWithIdentifier:Segue_VideoConference sender:nil];
     }else{
         [self.loginButton setEnabled:true];
     }
 
-    //
-    //    [self.sdk.AVChat.VideoController bindVideoRender:self.userId render:self.videoView];
-    //
-    //    [self.sdk.AVChat.VideoController openCamera];
-    //    self.btn_JoinConference.hidden   = NO ;
-    //    self.txt_userId.text = @"" ;
-}
+  }
 
 - (NSString *)randomUser {
     
     if ([UserDefaults getObjectforKey:UserDefault_UserId]) {
         return [UserDefaults getObjectforKey:UserDefault_UserId];
     }
+    return @"";
+}
+- (NSString *)returnSavedDisplayname {
     
-//    
-//    uint32_t num = 6;
-//    NSMutableString *string = [NSMutableString stringWithCapacity:num];
-//
-//    [string appendFormat:@"%@_", [[UIDevice currentDevice] name]];
-//    for (int i = 0; i < num; i++) {
-//        [string appendFormat:@"%C", (unichar)('a' + arc4random_uniform(25))];
-//    }
+    if ([UserDefaults getObjectforKey:UserDefault_DisplayName]) {
+        return [UserDefaults getObjectforKey:UserDefault_DisplayName];
+    }
     return @"";
 }
 

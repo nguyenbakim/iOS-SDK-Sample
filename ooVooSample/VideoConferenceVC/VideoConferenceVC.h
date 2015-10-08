@@ -1,22 +1,26 @@
 //
-//  ViewController.h
-//  ooVooSdkSampleShow
+//  VideoConferenceVC.h
+//  ooVooSample
 //
-//  Created by Alexander Balasanov on 2/25/15.
+//  Created by Udi on 8/2/15.
 //  Copyright (c) 2015 ooVoo LLC. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import <UIKit/UIKit.h>
 #import <ooVooSDK/ooVooSDK.h>
 
 #import "UserVideoPanel.h"
-
 #import "CustomToolbarVC.h"
 
+//#import <YapPlugin/YapPlugin.h>
 
 
-@interface ViewController : UIViewController <ooVooAVChatDelegate, ooVooVideoControllerDelegate, UITextFieldDelegate>
+@interface VideoConferenceVC : UIViewController <ooVooAVChatDelegate, ooVooVideoControllerDelegate, UITextFieldDelegate>
+
 @property (retain, nonatomic) ooVooClient *sdk;
+@property (weak, nonatomic) IBOutlet UIScrollView *viewScroll;
+@property (nonatomic, retain) UIPageControl* pageControl;
 
 //@property (weak,nonatomic)  NSString *currentEffect;
 @property (weak, nonatomic) IBOutlet UIView *viewTextBox;
@@ -27,6 +31,7 @@
 //@property (weak, nonatomic) IBOutlet UIButton *btn_JoinConference;
 
 @property (retain, nonatomic) IBOutlet UserVideoPanel *videoPanelView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *constrainTopViewVideo;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constrainRightViewVideo;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constrainBottomViewVideo;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *constrainLeftViewVideo;
@@ -49,11 +54,9 @@
 
 +(NSString*)getErrorDescription:(sdk_error)code;
 - (IBAction)act_joinConference:(id)sender;
-
-
-
-
-//
 - (void)animateViewsForState:(BOOL)state;
 
+
+
 @end
+

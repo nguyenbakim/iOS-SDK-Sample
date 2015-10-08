@@ -30,7 +30,6 @@
     int logLevel = [[[SettingBundle sharedSetting] getSettingForKey:@"settingBundle_SDK_LogLevel"]integerValue];
     [ooVooClient setLogLevel:logLevel];
 
-    //[ooVooClient setLogLevel:LogLevelTrace];
     [ooVooClient setLogger:self];
     [self autorize];
 }
@@ -48,42 +47,50 @@
 
     [self.sdk authorizeClient:token
                    completion:^(SdkResult *result) {
-                       [self onAutorize:result.Result == 0];
+
+                       sdk_error err = result.Result;
+                       if (err == sdk_error_OK) {
+                           NSLog(@"good autorization");
+                           sleep(0.5);
+                           [_delegate AuthorizationDelegate_DidAuthorized];
+                       }
+                       else {
+                           NSLog(@"fail  autorization");
+                           self.btn_Authorizate.hidden = false;
+                           self.lbl_Status.font=[UIFont systemFontOfSize:13];
+                           self.lbl_Status.text = @"Authorization Failed.";
+
+                           if (err == sdk_error_InvalidToken) {
+                               double delayInSeconds = 0.75;
+                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+
+                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
+                                                              delegate:nil
+                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                     otherButtonTitles:nil] show];
+                               });
+                               [_spinner stopAnimating];
+
+                           }
+                           else if (err != sdk_error_InvalidToken)
+                           {
+                               double delayInSeconds = 0.75;
+                               dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+                               dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+
+                                   [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
+                                                               message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), [result description]]
+                                                              delegate:nil
+                                                     cancelButtonTitle:NSLocalizedString(@"OK", nil)
+                                                     otherButtonTitles:nil] show];
+                               });
+                               [_spinner stopAnimating];
+                           }
+                       }
+
                    }];
-}
-
-- (void)onAutorize:(BOOL)result {
-
-    //  self.btn_JoinConference.hidden   = NO          ;
-    if (result) {
-        NSLog(@"good autorization");
-        // animate autorization view move in login view
-
-        // just for showing the spinner for sasha
-        sleep(0.5);
-
-        [_delegate AuthorizationDelegate_DidAuthorized];
-
-    } else {
-
-        NSLog(@"fail  autorization");
-        self.btn_Authorizate.hidden = false;
-        self.lbl_Status.font=[UIFont systemFontOfSize:13];
-        self.lbl_Status.text = @"Authorization Failed.";
-
-        double delayInSeconds = 0.75;
-        dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-        dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-
-            [[[UIAlertView alloc] initWithTitle:@"ooVoo Sdk"
-                                        message:[NSString stringWithFormat:NSLocalizedString(@"Error: %@", nil), @"App Token probably invalid or might be empty.\n\nGet your App Token at http://developer.oovoo.com.\nGo to Settings->ooVooSample screen and set the values, or set @APP_TOKEN constants in code."]
-                                       delegate:nil
-                              cancelButtonTitle:NSLocalizedString(@"OK", nil)
-                              otherButtonTitles:nil] show];
-        });
-        [_spinner stopAnimating];
-
-    }
 }
 
 #pragma mark - IBActions

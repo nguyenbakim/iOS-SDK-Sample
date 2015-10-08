@@ -20,7 +20,17 @@
     
     return self;
 }
-
+-(void)didMoveToWindow{
+    
+    [super didMoveToWindow];
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc]
+                                             initWithTarget:self action:@selector(touchUpInsideEvent)];
+    [tapRecognizer setNumberOfTouchesRequired:1];
+    [tapRecognizer setDelegate:self];
+    [self setUserInteractionEnabled:YES];
+    [self addGestureRecognizer:tapRecognizer];
+    
+}
 - (instancetype)initWithFrame:(CGRect)frame WithName:(NSString *)strUserName 
 {
     self = [super initWithFrame:frame];
@@ -62,7 +72,9 @@
     lblUserName.text = _strUserId;
 }
 
--(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+
+
+-(void)touchUpInsideEvent{
     [_delegate UserVideoPanel_Touched:self];
     
 }
@@ -136,7 +148,6 @@
 
 -(void) didVideoRenderStart 
 {
-    
      [self showAvatar:NO] ;
 }
 -(void) didVideoRenderStop 
@@ -146,10 +157,10 @@
 
 -(void)showAvatar:(bool)show{
     
-    if (!_isAllowedToChangeImage)
-    {
-        return;
-    }
+//    if (!_isAllowedToChangeImage)
+//    {
+//        return;
+//    }
     
     [self setAvatarImage];
     
@@ -197,7 +208,7 @@
                                         attribute:NSLayoutAttributeLeading
                                         relatedBy:NSLayoutRelationEqual
                                            toItem:self
-                                        attribute:NSLayoutAttributeLeft
+                                        attribute:NSLayoutAttributeLeading
                                        multiplier:1.0
                                          constant:0];
 }
@@ -208,7 +219,7 @@
                                         attribute:NSLayoutAttributeTrailing
                                         relatedBy:NSLayoutRelationEqual
                                            toItem:self
-                                        attribute:NSLayoutAttributeRight
+                                        attribute:NSLayoutAttributeTrailing
                                        multiplier:1.0
                                          constant:0];
 }

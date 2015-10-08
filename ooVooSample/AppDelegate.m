@@ -12,18 +12,25 @@
 
 #import "UserDefaults.h"
 #import "SettingBundle.h"
+
+
+
+
 #define User_isInVideoView @"User_isInVideoView"
+
 
  
 
 #define APP_TOKEN_SETTINGS_KEY    @"APP_TOKEN_SETTINGS_KEY"
 #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
 
-@interface AppDelegate ()
+@interface AppDelegate ()<UIAlertViewDelegate>
 
 @end
 
 @implementation AppDelegate
+
+
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
@@ -33,9 +40,12 @@
     [UserDefaults setBool:NO ToKey:User_isInVideoView];
     
     [self setupConnectionParameters];
-
+    
+    
     return YES;
 }
+
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
@@ -92,6 +102,8 @@
     [[NSUserDefaults standardUserDefaults] setValue:logLevel forKey:LOG_LEVEL_SETTINGS_KEY];
     [[NSUserDefaults standardUserDefaults] synchronize];
 
+    
+ 
 }
 
  
@@ -100,5 +112,40 @@
  
  
  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+
+// orientation
+
+- (NSUInteger)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window
+{
+    if ([self isIpad]) {
+        return UIInterfaceOrientationMaskAll;
+    }
+    
+    return ( UIInterfaceOrientationMaskPortraitUpsideDown | UIInterfaceOrientationMaskPortrait);
+}
+-(BOOL)shouldAutorotate
+{
+    return YES;
+}
+
+
+-(BOOL)isIpad{
+#define IDIOM    UI_USER_INTERFACE_IDIOM()
+#define IPAD     UIUserInterfaceIdiomPad
+    
+    if ( IDIOM == IPAD ) {
+        return true;
+    } else {
+        return  false;
+    }
+}
 
 @end

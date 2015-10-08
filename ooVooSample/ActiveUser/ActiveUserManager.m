@@ -15,8 +15,26 @@ static ActiveUserManager *user = nil;
     if (user == nil) {
         user = [[ActiveUserManager alloc] init];
         //  user.storage=[StorageData new];
+        
     }
     return user;
 }
+
+-(NSString *)randomConference
+{
+    if (!_randomConference) {
+        NSString *letters = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        NSMutableString *randomString = [NSMutableString stringWithCapacity:8];
+        
+        for (int i = 0; i < 8; i++) {
+            [randomString appendFormat:@"%C", [letters characterAtIndex:arc4random() % [letters length]]];
+            _randomConference=randomString;
+        }
+    }
+
+    
+    return _randomConference;
+}
+
 
 @end

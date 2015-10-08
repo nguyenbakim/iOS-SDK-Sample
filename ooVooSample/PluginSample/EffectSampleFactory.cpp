@@ -53,7 +53,7 @@ public:
 	}
 
 	const char* parameters() const
-    {
+	{
 		return  "{}";
 	}
 	void parameters(const char* json_params)
@@ -77,6 +77,7 @@ public:
 	{
 		return _is_default;
 	}
+	virtual const char* category() const override { return ""; }
 
 
 private:
@@ -114,8 +115,8 @@ oovoo::sdk::plugin::ptr EffectSampleFactory::create_plugin_instance(oovoo::sdk::
 {
 	switch (info->type())
 	{
-	case oovoo::sdk::plugin_info::VIDEO_EFFECT:
-		return _videoEffect = oovoo::sdk::make_object<EffectPlugin>(info);
+		case oovoo::sdk::plugin_info::VIDEO_EFFECT:
+			return _videoEffect = oovoo::sdk::make_object<EffectPlugin>(info);
 	}
 
 	return nullptr;
