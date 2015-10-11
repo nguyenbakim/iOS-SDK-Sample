@@ -7,40 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0B904EA71B09DC12005BF684 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904E981B09DC12005BF684 /* UIKit.framework */; };
-		0B904EA81B09DC12005BF684 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904E991B09DC12005BF684 /* CFNetwork.framework */; };
-		0B904EA91B09DC12005BF684 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904E9A1B09DC12005BF684 /* CoreMedia.framework */; };
-		0B904EAB1B09DC12005BF684 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904E9C1B09DC12005BF684 /* CoreLocation.framework */; };
-		0B904EAC1B09DC12005BF684 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904E9D1B09DC12005BF684 /* QuartzCore.framework */; };
-		0B904EAD1B09DC12005BF684 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904E9E1B09DC12005BF684 /* OpenGLES.framework */; };
-		0B904EAE1B09DC12005BF684 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904E9F1B09DC12005BF684 /* AudioToolbox.framework */; };
-		0B904EAF1B09DC12005BF684 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904EA01B09DC12005BF684 /* CoreAudio.framework */; };
-		0B904EB01B09DC12005BF684 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904EA11B09DC12005BF684 /* AVFoundation.framework */; };
-		0B904EB11B09DC12005BF684 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904EA21B09DC12005BF684 /* CoreVideo.framework */; };
-		0B904EB21B09DC12005BF684 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904EA31B09DC12005BF684 /* SystemConfiguration.framework */; };
-		0B904EB31B09DC12005BF684 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904EA41B09DC12005BF684 /* VideoToolbox.framework */; };
-		0B904EB51B09DC12005BF684 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B904EA61B09DC12005BF684 /* CoreGraphics.framework */; };
 		0B904EF91B09EDC6005BF684 /* CustomToolbarVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B904EF81B09EDC6005BF684 /* CustomToolbarVC.m */; };
 		0B904EFC1B09EDD7005BF684 /* AuthorizationLoaderVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B904EFB1B09EDD7005BF684 /* AuthorizationLoaderVc.m */; };
 		0BC676F61B319A6E007465C6 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC676F51B319A6E007465C6 /* UserDefaults.m */; };
 		2765FF1D1B31765500DA7D87 /* FileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2765FF1C1B31765500DA7D87 /* FileLogger.m */; };
-		27B9FDF21B207D3700EF461C /* ooVooSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27B9FDF11B207D3700EF461C /* ooVooSdk.framework */; };
 		451EF5111A9DF25400D41331 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 451EF5101A9DF25400D41331 /* main.m */; };
 		451EF5141A9DF25400D41331 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 451EF5131A9DF25400D41331 /* AppDelegate.m */; };
 		451EF51C1A9DF25400D41331 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 451EF51B1A9DF25400D41331 /* Images.xcassets */; };
-		451EF54B1A9DF2E900D41331 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451EF5481A9DF2C100D41331 /* MediaPlayer.framework */; };
-		451EF54F1A9DF2E900D41331 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 451EF5401A9DF29F00D41331 /* Accelerate.framework */; };
 		458F6D911B1B414D00737929 /* SettingBundle.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F6D901B1B414D00737929 /* SettingBundle.m */; };
 		458F6D931B1B415F00737929 /* ActiveUserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F6D921B1B415F00737929 /* ActiveUserManager.m */; };
-		45C5D85B1ABAD27E005A599B /* libc.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 45C5D85A1ABAD27E005A599B /* libc.dylib */; };
 		45F0743A1BBA5F80009CA794 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 45F074391BBA5F80009CA794 /* NSData+Base64.m */; settings = {ASSET_TAGS = (); }; };
 		45F3B65F1ACC18CA00EF60C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 451EF5181A9DF25400D41331 /* Main.storyboard */; };
 		45F3B6601ACC18CA00EF60C7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 451EF51D1A9DF25400D41331 /* LaunchScreen.xib */; };
- 
-		4A2700151AC3F0F00050F98E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2700141AC3F0F00050F98E /* MobileCoreServices.framework */; };
-		4A2700171AC3F11F0050F98E /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2700161AC3F11F0050F98E /* QuickLook.framework */; };
-		4A2700191AC3F1490050F98E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2700181AC3F1490050F98E /* AssetsLibrary.framework */; };
-		4A54070E1B5BD695003BACDA /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AAF63E21AAF47AF00BCD58F /* libz.dylib */; };
 		4A81846F1ADA8C1400977010 /* UserVideoPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A81846E1ADA8C1400977010 /* UserVideoPanel.m */; };
 		4A8184781ADA8C9C00977010 /* UIView-Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A8184771ADA8C9C00977010 /* UIView-Extensions.m */; };
 		4A81847F1ADA902400977010 /* LogInVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A81847E1ADA902400977010 /* LogInVC.m */; };
@@ -48,7 +26,6 @@
 		94464CA81B26128300EC30EB /* EffectPlugin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94464CA41B26128300EC30EB /* EffectPlugin.cpp */; };
 		94464CA91B26128300EC30EB /* EffectSampleFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94464CA61B26128300EC30EB /* EffectSampleFactory.cpp */; };
 		94464CAC1B26130400EC30EB /* EffectSampleFactoryIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 94464CAB1B26130400EC30EB /* EffectSampleFactoryIOS.mm */; };
-		B03D9CB01B271A2D0064CA25 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B03D9CAF1B271A2D0064CA25 /* CoreTelephony.framework */; };
 		DB17D1111B39B071008D10EB /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DB17D1101B39B071008D10EB /* Icon.png */; };
 		DB2E30501B39737E004C8E7B /* TableListVC.m in Sources */ = {isa = PBXBuildFile; fileRef = DB2E304F1B39737E004C8E7B /* TableListVC.m */; };
 		DB787D8A1B73A68C00BEF7E7 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DB787D871B73A68C00BEF7E7 /* Default@2x.png */; };
@@ -111,7 +88,6 @@
 		45C5D8581ABAD250005A599B /* libc++.1.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libc++.1.dylib"; path = "usr/lib/libc++.1.dylib"; sourceTree = SDKROOT; };
 		45C5D85A1ABAD27E005A599B /* libc.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libc.dylib; path = usr/lib/libc.dylib; sourceTree = SDKROOT; };
 		45F074391BBA5F80009CA794 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSData+Base64.m"; path = "Extensions/NSData+Base64.m"; sourceTree = "<group>"; };
- 
 		4A2700141AC3F0F00050F98E /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4A2700161AC3F11F0050F98E /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		4A2700181AC3F1490050F98E /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -158,29 +134,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A54070E1B5BD695003BACDA /* libz.dylib in Frameworks */,
-				B03D9CB01B271A2D0064CA25 /* CoreTelephony.framework in Frameworks */,
-				0B904EA81B09DC12005BF684 /* CFNetwork.framework in Frameworks */,
-				4A2700191AC3F1490050F98E /* AssetsLibrary.framework in Frameworks */,
-				4A2700171AC3F11F0050F98E /* QuickLook.framework in Frameworks */,
-				0B904EA91B09DC12005BF684 /* CoreMedia.framework in Frameworks */,
-				4A2700151AC3F0F00050F98E /* MobileCoreServices.framework in Frameworks */,
-				0B904EB31B09DC12005BF684 /* VideoToolbox.framework in Frameworks */,
- 
-				0B904EB51B09DC12005BF684 /* CoreGraphics.framework in Frameworks */,
-				45C5D85B1ABAD27E005A599B /* libc.dylib in Frameworks */,
-				27B9FDF21B207D3700EF461C /* ooVooSdk.framework in Frameworks */,
-				0B904EAE1B09DC12005BF684 /* AudioToolbox.framework in Frameworks */,
-				0B904EB01B09DC12005BF684 /* AVFoundation.framework in Frameworks */,
-				451EF54B1A9DF2E900D41331 /* MediaPlayer.framework in Frameworks */,
-				0B904EB11B09DC12005BF684 /* CoreVideo.framework in Frameworks */,
-				0B904EAC1B09DC12005BF684 /* QuartzCore.framework in Frameworks */,
-				0B904EA71B09DC12005BF684 /* UIKit.framework in Frameworks */,
-				451EF54F1A9DF2E900D41331 /* Accelerate.framework in Frameworks */,
-				0B904EAF1B09DC12005BF684 /* CoreAudio.framework in Frameworks */,
-				0B904EB21B09DC12005BF684 /* SystemConfiguration.framework in Frameworks */,
-				0B904EAB1B09DC12005BF684 /* CoreLocation.framework in Frameworks */,
-				0B904EAD1B09DC12005BF684 /* OpenGLES.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -265,7 +218,6 @@
 				0B904E9A1B09DC12005BF684 /* CoreMedia.framework */,
 				B03D9CAF1B271A2D0064CA25 /* CoreTelephony.framework */,
 				0B904EA21B09DC12005BF684 /* CoreVideo.framework */,
- 
 				451EF5481A9DF2C100D41331 /* MediaPlayer.framework */,
 				4A2700141AC3F0F00050F98E /* MobileCoreServices.framework */,
 				0B904E9E1B09DC12005BF684 /* OpenGLES.framework */,
@@ -652,13 +604,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../lib",
- 
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-gujgtnnnwpcpuddlcrkmsyqlvbiq/Build/Products/Debug-iphoneos",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-cowgwpkgvlpjhmgtwuxktagcrhin/Build/Products/Debug-iphoneos",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				INFOPLIST_FILE = ooVooSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
@@ -674,13 +620,7 @@
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/../lib",
- 
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-gujgtnnnwpcpuddlcrkmsyqlvbiq/Build/Products/Debug-iphoneos",
-					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-cowgwpkgvlpjhmgtwuxktagcrhin/Build/Products/Debug-iphoneos",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				INFOPLIST_FILE = ooVooSample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
