@@ -1,4 +1,4 @@
-## iOS-SDK-Sample for SDK v2.1
+## iOS-SDK-Sample for SDK v2.2
 
 =================
 >Please note changes to the architecture in this version of the sample app versus earlier versions.
@@ -18,7 +18,7 @@ Please visit [ooVoo SDK site](http://developer.oovoo.com) to register and obtain
 This version of the sample app requires [cocoapods](https://cocoapods.org/) in order to build this sample app. We have already inlcluded the necessary Podfile. Please follow the steps below in order to build the sample.
 
 1. Make sure you have a working [Cocoapods Installation ](https://guides.cocoapods.org/using/getting-started.html)
-2. Change into the project directory and run `$pod install`
+2. Change into the project directory and run `$ pod install`
 3. Run ooVooSample.xcworkspace and build the project
 
 ## Support

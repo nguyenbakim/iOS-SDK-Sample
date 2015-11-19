@@ -61,8 +61,9 @@
 -(void) didMoveToSuperview{
     [super didMoveToSuperview] ;
     _isAllowedToChangeImage=YES;
-    [self showAvatar:YES];
-    [self setUserName];
+    [self showAvatar:YES]; // bottom layer
+    [self setImageVideoView];
+    [self setUserName]; // top layer
 }
 
 - (void)layoutIfNeeded {
@@ -117,12 +118,30 @@
         imgView = [[UIImageView alloc] init];
         [imgView setImage:[UIImage imageNamed:@"Avatar"]];
         [self addSubview:imgView];
-        [self addConstraint:[self constraintToTopFor:imgView]];
-        [self addConstraint:[self constraintToBottomFor:imgView]];
-        [self addConstraint:[self constraintToLeftFor:imgView]];
-        [self addConstraint:[self constraintToRightFor:imgView]];
-        [imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self setConstarinsTo:imgView];
     }
+    
+}
+
+-(void)setConstarinsTo:(UIImageView*)imgView{
+    [self addConstraint:[self constraintToTopFor:imgView]];
+    [self addConstraint:[self constraintToBottomFor:imgView]];
+    [self addConstraint:[self constraintToLeftFor:imgView]];
+    [self addConstraint:[self constraintToRightFor:imgView]];
+    [imgView setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+}
+
+-(void)setImageVideoView{
+    
+//    if (!self.img) {
+//        self.img = [[UIImageView alloc]init];
+//        [self addSubview:self.img];
+//       // self.backgroundColor=[UIColor greenColor];
+//        [self setConstarinsTo:self.img];
+//
+//    }
+   
     
 }
 
@@ -145,6 +164,49 @@
     
 }
 
+//-(void) onProcessVideoFrame:(id<ooVooVideoFrame>) frame
+//{
+//    id<ooVooVideoData> videoData = frame.videoData;
+//    int width = frame.width;
+//    int height = frame.height;
+//    short frameNumber = frame.frameNumber;
+//    BOOL isKeyFrame = frame.isKeyFrame;
+//    BOOL isMirror = frame.isMirror;
+//    int rotationAngle = frame.rotationAngle;
+//    int deviceRotationAngle = frame.deviceRotationAngle;
+//    ooVooColorFormat colorFormat = frame.colorFormat;
+//    
+//    int dataLength = videoData.dataLength;
+//    NSData * data = videoData.data;
+//    int width1 = videoData.width;
+//    int height1 = videoData.height;
+//    int planesCount = videoData.planesCount;
+//    /*@property (readonly) int width ;
+//     @property (readonly) int height ;
+//     @property (readonly) short frameNumber ;
+//     @property (readonly) BOOL isKeyFrame ;
+//     @property (readonly) BOOL isMirror ;
+//     @property (readonly) int rotationAngle ;
+//     @property (readonly) int deviceRotationAngle ;
+//     @property (readonly) ooVooColorFormat colorFormat ;
+//     
+//     @property (readonly,retain, getter=data) NSData* data ;
+//     @property (readonly, getter=dataLength) int dataLength ;
+//     @property (readonly, getter=width) int width ;
+//     @property (readonly, getter=height) int height ;
+//     @property (readonly, getter=colorFormat) ooVooColorFormat colorFormat ;
+//     @property (readonly, getter=planesCount) int planesCount ;
+//     
+//     
+//     */
+//}
+
+
+//-(void)onProcessVideoFrame:(id<ooVooVideoFrame>)frame{
+//    
+//    
+//}
+
 
 -(void) didVideoRenderStart 
 {
@@ -156,6 +218,7 @@
 }
 
 -(void)showAvatar:(bool)show{
+    
     
 //    if (!_isAllowedToChangeImage)
 //    {
@@ -230,6 +293,8 @@
     imgView.frame = frame;
 }];
 }
+
+
 
 
 @end

@@ -7,18 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ViewController.h"
+#import "VideoConferenceVC.h"
+
  
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate >
 {
     UINavigationController *navigationController ;
     UIStoryboard *mainStoryboard ;
-    ViewController *viewVideoControler ;
+    VideoConferenceVC *viewVideoControler ;
+
+  //  VideoConferenceVCWithRender *viewVideoControllerRender;
+    
 
 }
 
 @property (strong, nonatomic) UIWindow *window;
-
+    @property (retain, nonatomic) ooVooClient *sdk;
 
 @end

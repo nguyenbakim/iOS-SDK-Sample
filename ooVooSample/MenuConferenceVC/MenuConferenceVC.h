@@ -12,4 +12,6 @@
 
 @interface MenuConferenceVC : UIViewController
 @property (retain, nonatomic) ooVooClient *sdk;
+
+- (IBAction)actMakeCallOrSendMessage:(id)sender;
 @end

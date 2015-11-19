@@ -10,19 +10,23 @@
 #import "UIView-Extensions.h"
 #import "ActiveUserManager.h"
 
-#import "SettingBundle.h"
+//#import "SettingBundle.h"
 #import "UserDefaults.h"
 
 #define User_isInVideoView @"User_isInVideoView"
 
 #define Segue_Authorization @"ToAuthorizationView"
+#define Segue_MenuConferenceVC @"Segue_MenuConferenceVC"
+
+#define Segue_VideoConference @"Segue_VideoConferenceVC"
 
 
 #define UserDefault_UserId @"UserID"
 #define UserDefault_DisplayName @"displayName"
 
 
-#define Segue_VideoConference @"Segue_VideoConferenceVC"
+#import <ooVooSDK/ooVooPushService.h>
+
 
 
 @interface LogInVC () {
@@ -116,7 +120,7 @@
     [spinner startAnimating];
     
    
-    
+
     [self.sdk.Account login:self.txt_userId.text
                  completion:^(SdkResult *result) {
                      NSLog(@"result code=%d result description %@", result.Result, result.description);
@@ -126,7 +130,11 @@
                           [self.loginButton setEnabled:true];
                      }
                      else
+                     {
                          [self onLogin:result.Result];
+                         if(![self.sdk.Messaging isConnected])
+                             [self.sdk.Messaging connect];
+                     }
                  }];
 }
 
@@ -160,7 +168,20 @@
     if (!error) {
         [ActiveUserManager activeUser].userId = self.txt_userId.text;
         [ActiveUserManager activeUser].displayName = self.txtDisplayName.text;
-        [self performSegueWithIdentifier:Segue_VideoConference sender:nil];
+//        NSString * uuid = [[NSUUID UUID] UUIDString] ;
+//        NSString * token = [ActiveUserManager activeUser].token;
+//        if(token && token.length > 0){
+//        [self.sdk.PushService subscribe:token deviceUid:uuid completion:^(SdkResult *result){
+//        [ActiveUserManager activeUser].isSubscribed = true;
+//            [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+//        }];
+//        }
+//        
+//        else
+//        {
+           [self performSegueWithIdentifier:Segue_MenuConferenceVC sender:nil]; //Segue_VideoConference
+//        }
+       
     }else{
         [self.loginButton setEnabled:true];
     }

@@ -7,6 +7,7 @@
 //
 
 #import <ooVooSDK/ooVooSDK.h>
+//#import "VideoFrameUser.h"
 
 @protocol UserVideoPanelDELEGATE;
 
@@ -17,6 +18,7 @@
      UILabel *lblVideoAlert;
 
 }
+//@property (nonatomic,strong) UIImageView *img;
 
 @property (nonatomic, strong) NSString *strUserId;
 @property (nonatomic,weak)id<UserVideoPanelDELEGATE>delegate;

@@ -5,10 +5,38 @@
 	<key>PreferenceSpecifiers</key>
 	<array>
 		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>Messaging in background</string>
+			<key>Key</key>
+			<string>APP_MESSAGING</string>
+			<key>DefaultValue</key>
+			<false/>
+			<key>FalseValue</key>
+			<false/>
+			<key>TrueValue</key>
+			<true/>
+		</dict>
+		<dict>
 			<key>Title</key>
 			<string>CONNECTION PARAMETERS</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSToggleSwitchSpecifier</string>
+			<key>Title</key>
+			<string>VideoCustomRender</string>
+			<key>Key</key>
+			<string>APP_VIDEO_RENDER</string>
+			<key>DefaultValue</key>
+			<false/>
+			<key>TrueValue</key>
+			<true/>
+			<key>FalseValue</key>
+			<false/>
 		</dict>
 		<dict>
 			<key>Type</key>

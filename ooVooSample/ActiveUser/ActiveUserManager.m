@@ -20,6 +20,11 @@ static ActiveUserManager *user = nil;
     return user;
 }
 
+-(instancetype)init{
+    _isSubscribed=false;
+    return self;
+}
+
 -(NSString *)randomConference
 {
     if (!_randomConference) {

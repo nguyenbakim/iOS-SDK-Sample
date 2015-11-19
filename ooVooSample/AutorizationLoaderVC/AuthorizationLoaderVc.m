@@ -7,8 +7,9 @@
 //
 
 #import "AuthorizationLoaderVc.h"
-#import "SettingBundle.h"
+//#import "SettingBundle.h"
 #import "FileLogger.h"
+#import "UserDefaults.h"
 
 
 @interface AuthorizationLoaderVc ()
@@ -26,9 +27,8 @@
     // Do any additional setup after loading the view.
     self.sdk = [ooVooClient sharedInstance];
     self.sdk.AVChat.delegate = self;
-    NSLog(@"SdkLog %@",[[SettingBundle sharedSetting] getSettingForKey:@"settingBundle_SDK_LogLevel"]);
-    int logLevel = [[[SettingBundle sharedSetting] getSettingForKey:@"settingBundle_SDK_LogLevel"]integerValue];
-    [ooVooClient setLogLevel:logLevel];
+    int logLevel =[[UserDefaults getObjectforKey:@"LOG_LEVEL_SETTINGS_KEY"]integerValue];
+    [ooVooClient setLogLevel:LogLevelTrace];
 
     [ooVooClient setLogger:self];
     [self autorize];
@@ -42,7 +42,8 @@
 #pragma mark - Authorization ...
 
 - (void)autorize {
-    NSString* token = [[SettingBundle sharedSetting] getSettingForKey:@"settingBundle_AppToken"];
+    
+    NSString* token =[UserDefaults getObjectforKey:@"APP_TOKEN_SETTINGS_KEY"];
     NSLog(@"Token %@",token);
 
     [self.sdk authorizeClient:token
