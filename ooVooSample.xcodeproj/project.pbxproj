@@ -24,7 +24,6 @@
 		0B904EFC1B09EDD7005BF684 /* AuthorizationLoaderVc.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B904EFB1B09EDD7005BF684 /* AuthorizationLoaderVc.m */; };
 		0BC676F61B319A6E007465C6 /* UserDefaults.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC676F51B319A6E007465C6 /* UserDefaults.m */; };
 		2765FF1D1B31765500DA7D87 /* FileLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 2765FF1C1B31765500DA7D87 /* FileLogger.m */; };
-		27B9FDF21B207D3700EF461C /* ooVooSdk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27B9FDF11B207D3700EF461C /* ooVooSdk.framework */; };
 		450B5D311BDE132000E8A5B0 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 450B5D301BDE132000E8A5B0 /* NSData+Base64.m */; };
 		451EF5111A9DF25400D41331 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 451EF5101A9DF25400D41331 /* main.m */; };
 		451EF5141A9DF25400D41331 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 451EF5131A9DF25400D41331 /* AppDelegate.m */; };
@@ -35,7 +34,6 @@
 		45BD7A951BF34350007C95F9 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 45BD7A941BF34350007C95F9 /* libz.tbd */; };
 		45F3B65F1ACC18CA00EF60C7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 451EF5181A9DF25400D41331 /* Main.storyboard */; };
 		45F3B6601ACC18CA00EF60C7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 451EF51D1A9DF25400D41331 /* LaunchScreen.xib */; };
- 
 		4A2700151AC3F0F00050F98E /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2700141AC3F0F00050F98E /* MobileCoreServices.framework */; };
 		4A2700171AC3F11F0050F98E /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2700161AC3F11F0050F98E /* QuickLook.framework */; };
 		4A2700191AC3F1490050F98E /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A2700181AC3F1490050F98E /* AssetsLibrary.framework */; };
@@ -114,7 +112,6 @@
 		458F6D921B1B415F00737929 /* ActiveUserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ActiveUserManager.m; path = ActiveUser/ActiveUserManager.m; sourceTree = "<group>"; };
 		45BD7A921BF34344007C95F9 /* libc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libc++.tbd"; path = "usr/lib/libc++.tbd"; sourceTree = SDKROOT; };
 		45BD7A941BF34350007C95F9 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
- 
 		4A2700141AC3F0F00050F98E /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		4A2700161AC3F11F0050F98E /* QuickLook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickLook.framework; path = System/Library/Frameworks/QuickLook.framework; sourceTree = SDKROOT; };
 		4A2700181AC3F1490050F98E /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -178,9 +175,7 @@
 				0B904EA91B09DC12005BF684 /* CoreMedia.framework in Frameworks */,
 				4A2700151AC3F0F00050F98E /* MobileCoreServices.framework in Frameworks */,
 				0B904EB31B09DC12005BF684 /* VideoToolbox.framework in Frameworks */,
- 
 				0B904EB51B09DC12005BF684 /* CoreGraphics.framework in Frameworks */,
-				27B9FDF21B207D3700EF461C /* ooVooSdk.framework in Frameworks */,
 				0B904EAE1B09DC12005BF684 /* AudioToolbox.framework in Frameworks */,
 				0B904EB01B09DC12005BF684 /* AVFoundation.framework in Frameworks */,
 				451EF54B1A9DF2E900D41331 /* MediaPlayer.framework in Frameworks */,
@@ -277,7 +272,6 @@
 				0B904E9A1B09DC12005BF684 /* CoreMedia.framework */,
 				B03D9CAF1B271A2D0064CA25 /* CoreTelephony.framework */,
 				0B904EA21B09DC12005BF684 /* CoreVideo.framework */,
- 
 				451EF5481A9DF2C100D41331 /* MediaPlayer.framework */,
 				4A2700141AC3F0F00050F98E /* MobileCoreServices.framework */,
 				0B904E9E1B09DC12005BF684 /* OpenGLES.framework */,
@@ -723,7 +717,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../lib",
- 
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-gujgtnnnwpcpuddlcrkmsyqlvbiq/Build/Products/Debug-iphoneos",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-cowgwpkgvlpjhmgtwuxktagcrhin/Build/Products/Debug-iphoneos",
 				);
@@ -746,7 +739,6 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../lib",
- 
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-gujgtnnnwpcpuddlcrkmsyqlvbiq/Build/Products/Debug-iphoneos",
 					"$(USER_LIBRARY_DIR)/Developer/Xcode/DerivedData/ooVooSdk-cowgwpkgvlpjhmgtwuxktagcrhin/Build/Products/Debug-iphoneos",
 				);

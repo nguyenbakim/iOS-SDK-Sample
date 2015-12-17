@@ -1,0 +1,10 @@
+PODS:
+  - ooVooSDK2 (2.2.0.72)
+
+DEPENDENCIES:
+  - ooVooSDK2 (~> 2.0)
+
+SPEC CHECKSUMS:
+  ooVooSDK2: 3ed36355a05e522e15fc5e5fef1004a40bda862a
+
+COCOAPODS: 0.39.0
