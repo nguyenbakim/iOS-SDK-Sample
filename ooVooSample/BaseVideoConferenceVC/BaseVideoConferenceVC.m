@@ -649,6 +649,13 @@
 
 #pragma mark - Navigation
 
+-(void)infoVCSetData{
+    infoVC.participants = participants;
+    infoVC.arrParticipants = [self getParticipantsNameList];
+    infoVC.strConferenceId = _txt_conferenceId.text;
+    [infoVC.table reloadData];
+}
+
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     if ([segue.identifier isEqual:Segue_ToCustomToolBar]) {
@@ -661,9 +668,7 @@
         if (!infoVC.delegate) {
             infoVC.delegate=self;
         }
-        infoVC.participants = participants;
-        infoVC.arrParticipants = [self getParticipantsNameList];
-        infoVC.strConferenceId = _txt_conferenceId.text;
+        [self infoVCSetData];
     }
     
     if ([segue.identifier isEqual:Segue_EffectList]) {
@@ -781,7 +786,8 @@
     
     if (infoVC)
     {
-        [infoVC.table reloadData];
+        [self infoVCSetData];
+
     }
 }
 
@@ -1139,6 +1145,11 @@
             [self leaveSession];
         }
     }
+    
+    if (infoVC) {
+        [self infoVCSetData];
+    }
+    
 }
 
 
@@ -1199,6 +1210,10 @@
     currentRes = [self.sdk.AVChat.VideoController getConfig:ooVooVideoControllerConfigKeyResolution];
         NSLog(@"the resolution after join %@",currentRes);
 
+    if (infoVC) {
+        [self infoVCSetData];
+
+    }
 }
 
 

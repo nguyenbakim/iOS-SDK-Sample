@@ -73,6 +73,10 @@ typedef NS_ENUM(int, ooVooVideoType)
     rawImagePixels = 0 ;
     err = kvImageNoError;
     flags = kvImageNoFlags;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self  selector:@selector(orientationChanged:)name:UIDeviceOrientationDidChangeNotification  object:nil];
+    [self orientationChanged:nil];
+    
 }
 
 -(void)onProcessVideoFrame:(id<ooVooVideoFrame>)frame{
@@ -244,6 +248,66 @@ typedef NS_ENUM(int, ooVooVideoType)
     
     return cgImageFromBytes;
 }
+
+#pragma mark - Orientation
+
+
+// Works on ipad only !
+- (void)orientationChanged:(NSNotification *)notification{
+
+    
+    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+    switch (orientation)
+    {
+        case UIDeviceOrientationUnknown:
+            NSLog(@"UIDeviceOrientationUnknown");
+            break;
+            
+        case UIDeviceOrientationPortrait:
+            
+            _img.transform=CGAffineTransformMakeRotation(0);
+            
+            NSLog(@"UIDeviceOrientationPortrait");//good
+            break;
+            
+        case UIDeviceOrientationPortraitUpsideDown:
+            NSLog(@"UIDeviceOrientationPortraitUpsideDown");
+            
+            _img.transform=CGAffineTransformMakeRotation(0);
+            _img.transform=CGAffineTransformMakeRotation(2*(M_PI/2));
+            
+            break;
+            
+        case UIDeviceOrientationLandscapeLeft:
+            NSLog(@"UIDeviceOrientationLandscapeLeft");
+            
+            _img.transform=CGAffineTransformMakeRotation(0);
+            _img.transform=CGAffineTransformMakeRotation(3*(M_PI/2));
+            
+            break;
+            
+            
+        case UIDeviceOrientationLandscapeRight:
+            NSLog(@"UIDeviceOrientationLandscapeRight");
+            
+            _img.transform=CGAffineTransformMakeRotation(0);
+            _img.transform=CGAffineTransformMakeRotation(M_PI/2);//good
+            
+            break;
+            
+        case UIDeviceOrientationFaceUp:
+            NSLog(@"UIDeviceOrientationFaceUp");
+            break;
+            
+            
+        case UIDeviceOrientationFaceDown:
+            NSLog(@"UIDeviceOrientationFaceDown");
+            break;
+    }
+    
+}
+
+
 
 
 @end

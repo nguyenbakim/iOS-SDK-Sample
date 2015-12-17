@@ -26,7 +26,12 @@
 #define LOG_LEVEL_SETTINGS_KEY    @"LOG_LEVEL_SETTINGS_KEY"
 #define APP_VIDEO_RENDER            @"APP_VIDEO_RENDER"
 #define APP_MESSAGING            @"APP_MESSAGING"
-#define TOKEN @"Put Your Application Token Here" 
+ 
+
+#ifndef TOKEN
+#define TOKEN @"Put Your Token Here"
+#endif
+
 
 
 @interface AppDelegate ()<UIAlertViewDelegate>{

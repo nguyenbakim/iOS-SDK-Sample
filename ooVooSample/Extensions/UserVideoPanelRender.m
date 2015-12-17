@@ -119,6 +119,7 @@
         [imgView setImage:[UIImage imageNamed:@"Avatar"]];
         [self addSubview:imgView];
         [self setConstarinsTo:imgView];
+        
     }
     
 }
